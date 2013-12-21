@@ -1,0 +1,7 @@
+<!ENTITY ssbrowser.title   "SSBrowser">
+<!ENTITY ssbrowser.back    "Back">
+<!ENTITY ssbrowser.forward "Forward">
+<!ENTITY ssbrowser.reload  "Reload">
+<!ENTITY ssbrowser.stop    "Stop">
+<!ENTITY ssbrowser.go      "Go">
+<!ENTITY ssbrowser.console "Console">

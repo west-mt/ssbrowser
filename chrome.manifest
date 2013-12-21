@@ -1,0 +1,3 @@
+content ssb file:chrome/content/
+locale  ssb en-US file:chrome/locale/en-US/
+locale  branding en-US file:chrome/locale/branding/
