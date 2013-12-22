@@ -3,20 +3,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 .navbar {
+/*
   -moz-border-end: 2px solid;
   -moz-border-left-colors: threeDShadow threeDHighlight;
   -moz-border-right-colors: threeDShadow threeDHighlight;
+  -moz-border-bottom-colors: threeDShadow threeDHighlight;
   padding: 2px 0;
   -moz-box-align: center;
   background-color: -moz-dialog;
+  border: 2px solid ThreeDShadow !important;
+	border: 2px solid !important;
+*/
+	border: 2px solid !important;
+	-moz-border-left-colors: threeDShadow threeDHighlight !important;
+	-moz-border-top-colors: threeDShadow threeDHighlight !important;
+	-moz-border-right-colors: threeDShadow threeDHighlight !important;
+	-moz-border-bottom-colors: threeDShadow threeDHighlight !important;
+	background-color: -moz-dialog;
 }
 
-.navbuttons {
-  /*padding-bottom: 10px;*/
-  /*margin-bottom: 10px;*/
-}
-
-.navbuttons .toolbarbutton-text {
+.navbar .toolbarbutton-text {
   display: none;
 }
 
@@ -49,3 +55,7 @@
   -moz-image-region: rect(0px 53px 17px 36px);
 }
 
+.setting {
+  list-style-image: url("chrome://ssb/skin/toolbar2.png");
+  -moz-image-region: rect(0px 467px 17px 450px);
+}
