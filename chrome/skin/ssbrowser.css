@@ -22,38 +22,31 @@
 }
 
 .back {
-  list-style-image: url("moz-icon://stock/gtk-go-back?size=menu");
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  /*                    top right bottom left */ 
+  -moz-image-region: rect(0px 17px 17px 0px);
 }
 
 .back[disabled="true"] {
-  list-style-image: url("moz-icon://stock/gtk-go-back?size=menu&state=disabled");
+  -moz-image-region: rect(18px 17px 35px 0px) !important;
 }
 
 .forward {
-  list-style-image: url("moz-icon://stock/gtk-go-forward?size=menu");
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 35px 17px 17px);
 }
 
 .forward[disabled="true"] {
-  list-style-image: url("moz-icon://stock/gtk-go-forward?size=menu&state=disabled");
+  -moz-image-region: rect(18px 35px 35px 17px);
 }
 
-.engines .toolbarbutton-icon {
-  width: 16px;
-  height: 16px;
+.reload_stop[mode=""]{
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 71px 17px 54px);
 }
 
-.defaultButton {
-  -moz-appearance: none;
-  list-style-image: url("chrome://messenger/skin/icons/search-favorite.png");
-  -moz-image-region: rect(0px 16px 16px 0px);
-
-  border: none;
-  padding: 0;
-  margin: 0;
-  min-width: 0;
-  background: transparent;
+.reload_stop[mode="loading"] {
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 53px 17px 36px);
 }
 
-.defaultButton[checked="true"] {
-  -moz-image-region: rect(0px 32px 16px 16px);
-}

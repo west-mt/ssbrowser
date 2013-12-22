@@ -1,39 +1,26 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://global/skin" type="text/css"?>
-<?xml-stylesheet href="chrome://ssb/skin/webSearch.css" type="text/css"?>
+<?xml-stylesheet href="chrome://ssb/skin/ssbrowser.css" type="text/css"?>
+
+
 
 <!DOCTYPE window SYSTEM "chrome://ssb/locale/ssbrowser.dtd">
-<xul:window title     ="&ssbrowser.title;"
-            xmlns ="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-            xmlns:xul ="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-            xmlns:html="http://www.w3.org/1999/xhtml"
-            id        ="ssbrowser"
-            width     ="800"
-            height    ="600">
-    <xul:script type="application/javascript"
+<window title     ="&ssbrowser.title;"
+        xmlns ="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:xul ="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        id        ="ssbrowser"
+        width     ="900"
+        height    ="600">
+	<script type="application/javascript" src="chrome://ssb/content/jquery-1.10.2.min.js" />
+    <script type="application/javascript"
                 src="chrome://ssb/content/ssbrowser.js" />
-    <html:h1>My Browser</html:h1>
-    <html:p>My browser can use XUL or HTML elements in it's UI.</html:p>
-    <xul:hbox>
-        <xul:button id       ="back"
-                    label    ="&ssbrowser.back;"
-                    oncommand="back();"
-                    disabled ="true" />
-        <xul:button id       ="forward"
-                    label    ="&ssbrowser.forward;"
-                    oncommand="forward();"
-                    disabled ="true" />
-        <xul:button id       ="reload"
-                    label    ="&ssbrowser.reload;"
-                    oncommand="reload();" />
-        <xul:button id       ="stop"
-                    label    ="&ssbrowser.stop;"
-                    oncommand="stop();"
-                    disabled ="true" />
+    <hbox>
         <xul:textbox id      ="urlbar"
                      value   =""
                      flex    ="1"
+					 readonly="true"
                      onchange="go();" />
         <xul:button id       ="go"
                     label    ="&ssbrowser.go;"
@@ -44,65 +31,34 @@
         <xul:button id       ="ls"
                     label    ="ls"
                     oncommand="ls();" />
-    </xul:hbox>
+    </hbox>
 
-
-    <xul:browser flex="1"
-                 id  ="browser"
-                 src =""
-                 type="content-primary" />
-    <xul:statusbar>
-        <xul:statusbarpanel id   ="status"
-                            label=""
-                            crop ="end"
-                            flex ="1" />
-        <xul:progressmeter id    ="progress"
-                           mode  ="determined"
-                           value ="0%"
-                           style ="display: none" />
-        <xul:statusbarpanel id   ="security"
-                            label=""
-                            style="display: none" />
-    </xul:statusbar>
 
     <hbox flex="1">
       <vbox class="navbar">
         <vbox class="navbuttons">
-          <toolbarbutton class="back" command="cmd_goBackSearch"/>
-          <toolbarbutton class="forward" command="cmd_goForwardSearch"/>
+          <toolbarbutton class="back" oncommand="back();" disabled ="true"/>
+          <toolbarbutton class="forward" oncommand="forward();" disabled ="true"/>
+          <toolbarbutton class="reload_stop" oncommand="reload_stop();" mode=""/>
         </vbox>
-        <arrowscrollbox class="engines" orient="vertical"
-                        flex="1"/>
-        <button class="defaultButton" type="checkbox"/>
       </vbox>
-      <browser id="dummywebsearchbrowser" type="content-targetable" flex="1"
-               disablehistory="true" autocompletepopup="PopupAutoComplete"
-               context="mailContext"/>
+      <vbox flex="1">
+		<browser id="browser" type="content-primary" flex="1"
+				 autocompletepopup="PopupAutoComplete"/>
+		<statusbar>
+          <statusbarpanel id   ="status"
+                          label=""
+                          crop ="end"
+                          flex ="1" />
+          <progressmeter id    ="progress"
+						 mode  ="determined"
+						 value ="0%"
+						 style ="display: none" />
+          <statusbarpanel id   ="security"
+                          label=""
+                          style="display: none" />
+		</statusbar>
+	  </vbox>
     </hbox>
-</xul:window>
+</window>
 
-<!--
-<?xml version="1.0"?>
-<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<dialog id="donothing" title="Dialog example"
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-  buttons="accept,cancel"
-  buttonlabelcancel="Cancel"
-  buttonlabelaccept="Save"
-  ondialogaccept="return doOK();"
-  ondialogcancel="return doCancel();">
-    
-  <dialogheader title="Options" description="My preferences"/>
-  <groupbox>
-    <caption label="Colour"/>
-    <radiogroup>
-      <radio label="Red"/>
-      <radio label="Green" selected="true"/>
-      <radio label="Blue"/>
-    </radiogroup>
-    <label value="Nickname"/>
-    <textbox/>
-  </groupbox>
-</dialog>
-
--->
