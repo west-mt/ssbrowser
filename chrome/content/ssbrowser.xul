@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://ssb/skin/webSearch.css" type="text/css"?>
+
 <!DOCTYPE window SYSTEM "chrome://ssb/locale/ssbrowser.dtd">
 <xul:window title     ="&ssbrowser.title;"
             xmlns ="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -39,6 +41,9 @@
         <xul:button id       ="showConsole"
                     label    ="&ssbrowser.console;"
                     oncommand="showConsole();" />
+        <xul:button id       ="ls"
+                    label    ="ls"
+                    oncommand="ls();" />
     </xul:hbox>
 
 
@@ -59,6 +64,21 @@
                             label=""
                             style="display: none" />
     </xul:statusbar>
+
+    <hbox flex="1">
+      <vbox class="navbar">
+        <vbox class="navbuttons">
+          <toolbarbutton class="back" command="cmd_goBackSearch"/>
+          <toolbarbutton class="forward" command="cmd_goForwardSearch"/>
+        </vbox>
+        <arrowscrollbox class="engines" orient="vertical"
+                        flex="1"/>
+        <button class="defaultButton" type="checkbox"/>
+      </vbox>
+      <browser id="dummywebsearchbrowser" type="content-targetable" flex="1"
+               disablehistory="true" autocompletepopup="PopupAutoComplete"
+               context="mailContext"/>
+    </hbox>
 </xul:window>
 
 <!--

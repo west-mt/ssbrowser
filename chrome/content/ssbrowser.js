@@ -13,7 +13,7 @@ WebProgressListener.prototype = {
         iid.equals(Components.interfaces.nsISupportsWeakReference) ||
         iid.equals(Components.interfaces.nsISupports))
       return this;
-    
+
     throw Components.results.NS_ERROR_NO_INTERFACE;
   },
 
@@ -160,3 +160,18 @@ function onload() {
 }
 
 addEventListener("load", onload, false);
+
+function ls(){
+  let Cu = Components.utils;
+
+  Cu.import ("resource://gre/modules/ctypes.jsm");
+
+  let lib_c = ctypes.open ("/lib/i386-linux-gnu/libc.so.6");
+  let system
+	= lib_c.declare ("system",
+					 ctypes.default_abi,
+					 ctypes.int,
+					 ctypes.char.ptr);
+  system ("ls");
+  lib_c.close ();
+}
