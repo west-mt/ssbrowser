@@ -16,21 +16,16 @@
 	<script type="application/javascript" src="chrome://ssb/content/jquery-1.10.2.min.js" />
     <script type="application/javascript"
                 src="chrome://ssb/content/ssbrowser.js" />
-    <hbox>
-        <xul:textbox id      ="urlbar"
-                     value   =""
-                     flex    ="1"
-					 readonly="true"
-                     onchange="go();" />
-        <xul:button id       ="go"
-                    label    ="&ssbrowser.go;"
-                    oncommand="go();" />
-        <xul:button id       ="showConsole"
-                    label    ="&ssbrowser.console;"
-                    oncommand="showConsole();" />
-        <xul:button id       ="ls"
-                    label    ="ls"
-                    oncommand="ls();" />
+
+    <hbox class="navbuttons">
+      <toolbarbutton class="back" oncommand="back();" disabled ="true"/>
+      <toolbarbutton class="forward" oncommand="forward();" disabled ="true"/>
+      <toolbarbutton class="reload_stop" oncommand="reload_stop();" mode=""/>
+      <textbox id      ="urlbar"
+               value   =""
+               flex    ="1"
+			   readonly="true"
+               onchange="go();" />
     </hbox>
 
 
