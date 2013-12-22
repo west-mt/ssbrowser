@@ -79,8 +79,8 @@ WebProgressListener.prototype = {
   // This method is called to indicate a status changes for the currently
   // loading page.  The message is already formatted for display.
   onStatusChange: function(webProgress, request, status, message) {
-	var status_ = document.getElementById("status");
-	status_.setAttribute("label", message);
+	//var status_ = document.getElementById("status");
+	//status_.setAttribute("label", message);
   },
 
   // This method is called when the security state of the browser changes.
@@ -136,11 +136,6 @@ function reload_stop() {
 }
 
 
-function showConsole() {
-  window.open("chrome://global/content/console.xul", "_blank",
-			  "chrome,extrachrome,menubar,resizable,scrollbars,status,toolbar");
-}
-
 function onload() {
   var urlbar = document.getElementById("urlbar");
   urlbar.value = "http://www.mozilla.org/";
@@ -156,6 +151,7 @@ function onload() {
 
 addEventListener("load", onload, false);
 
+/*
 function ls(){
   let Cu = Components.utils;
 
@@ -170,3 +166,4 @@ function ls(){
   system("ls -l");
   lib_c.close();
 }
+*/

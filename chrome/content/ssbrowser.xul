@@ -27,19 +27,14 @@
 
 	<browser id="browser" type="content-primary" flex="1"
 			 autocompletepopup="PopupAutoComplete"/>
-	<statusbar>
-      <statusbarpanel id   ="status"
-                      label=""
-                      crop ="end"
-                      flex ="1" />
+
+    <hbox class="bottombar">
+      <label id="status" value="" crop ="end" flex ="1"/>
       <progressmeter id    ="progress"
 					 mode  ="determined"
 					 value ="0%"
 					 style ="display: none" />
-      <statusbarpanel id   ="security"
-                      label=""
-                      style="display: none" />
       <toolbarbutton class="setting" oncommand="reload_stop();"/>
-	</statusbar>
+    </hbox>
 </window>
 
