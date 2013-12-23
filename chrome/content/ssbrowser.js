@@ -12,10 +12,12 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 
 //TODO:
 // * リンククリック時にアドレスを確認、外部サイトの場合、標準ブラウザで開く
-//   - ホスト名チェックだけでなく、特定パターンとの照合を追加
-// - コマンドライン引数の読み取り
+//   * ホスト名チェックだけでなく、特定パターンとの照合を追加
+// * コマンドライン引数の読み取り
 // - 設定ウインドウの追加
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
+//   - プロファイル自動生成
+// - 専用アイコン設定
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
