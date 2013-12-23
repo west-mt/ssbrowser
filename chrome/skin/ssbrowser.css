@@ -15,6 +15,8 @@
 }
 
 #link_status {
+	width: 16px !important;
+	height: 16px !important;
 	list-style-image: url("chrome://ssb/skin/toolbar2.png");
 	-moz-image-region: rect(0px 305px 17px 288px);
 }

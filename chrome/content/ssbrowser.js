@@ -3,6 +3,8 @@ var listener;
 var status_msg;
 var link_status;
 var start_uri = null;
+var include_regexp = null;
+var exclude_regexp = null;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
@@ -162,15 +164,22 @@ function setting() {
 
 function isLinkExternal(href, internal_regexp) {
 
+  //パターンが指定されている場合、除外パターン→該当パターンの順に判定
+  if(exclude_regexp){
+	if (exclude_regexp.test(href)) return true;
+  }
+  if(include_regexp){
+	if (include_regexp.test(href)) return false;
+  }
+
+  if(include_regexp || exclude_regexp) return true;
+
+  //パターンが指定されていない場合、ホスト名で判定
   var uri = ios.newURI(href, null, null);
 
   // Links from our host are always internal
   if (/*uri.scheme == start_uri.scheme &&*/ uri.host == start_uri.host)
     return false;
-
-  if (internal_regexp){
-
-  }
 
   return true;
 }
@@ -237,9 +246,32 @@ function click_handler(e){
 
 function onload() {
   var urlbar = document.getElementById("urlbar");
-  urlbar.value = "http://www.mozilla.org/";
+  var cmdLine = window.arguments[0];
+
+  //urlbar.value = "http://www.mozilla.org/";
   //urlbar.value = "http://www.yahoo.co.jp/";
   //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
+
+  cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
+
+  var url = cmdLine.handleFlagWithParam("url", true);
+
+  if(url){
+	urlbar.value = url;
+  }else{
+	urlbar.value = 'chrome://ssb/content/usage.html';
+  }
+
+  var patt = cmdLine.handleFlagWithParam("include", true);
+
+  if(patt){
+	include_regexp = new RegExp(patt);
+  }
+
+  var expatt = cmdLine.handleFlagWithParam("exclude", true);
+  if(expatt){
+	exclude_regexp = new RegExp(expatt);
+  }
 
   listener = new WebProgressListener();
 
