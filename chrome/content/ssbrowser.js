@@ -17,7 +17,7 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 // - 設定ウインドウの追加
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
 //   - プロファイル自動生成
-// - 専用アイコン設定
+// - アイコン設定、タイトル設定
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
