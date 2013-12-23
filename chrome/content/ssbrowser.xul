@@ -29,12 +29,19 @@
 			 autocompletepopup="PopupAutoComplete"/>
 
     <hbox class="bottombar">
-      <label id="status" value="" crop ="end" flex ="1"/>
+	  <vbox flex="1">
+		<spacer flex="1"/>
+		<hbox flex="1">
+		  <image id="link_status" style="display: none"/>
+		  <label id="status" value="" crop ="end" flex="1"/>
+		</hbox>
+		<spacer flex="1"/>
+	  </vbox>
       <progressmeter id    ="progress"
 					 mode  ="determined"
 					 value ="0%"
 					 style ="display: none" />
-      <toolbarbutton class="setting" oncommand="reload_stop();"/>
+      <toolbarbutton class="setting" oncommand="setting();"/>
     </hbox>
 </window>
 

@@ -1,5 +1,20 @@
 var browser;
 var listener;
+var status_msg;
+var link_status;
+var start_uri = null;
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+
+
+//TODO:
+// - リンククリック時にアドレスを確認、外部サイトの場合、標準ブラウザで開く
+//   - ホスト名チェックだけでなく、特定パターンとの照合を追加
+// - コマンドライン引数の読み取り
+// - 設定ウインドウの追加
+// - 起動の仕組みを作成。ショートカット、スクリプトを生成
+
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
 function WebProgressListener() {
@@ -12,9 +27,9 @@ WebProgressListener.prototype = {
   // by saying that we QI to nsISupportsWeakReference.  XPConnect will take
   // care of actually implementing that interface on our behalf.
   QueryInterface: function(iid) {
-	if (iid.equals(Components.interfaces.nsIWebProgressListener) ||
-		iid.equals(Components.interfaces.nsISupportsWeakReference) ||
-		iid.equals(Components.interfaces.nsISupports))
+	if (iid.equals(Ci.nsIWebProgressListener) ||
+		iid.equals(Ci.nsISupportsWeakReference) ||
+		iid.equals(Ci.nsISupports))
 	  return this;
 
 	throw Components.results.NS_ERROR_NO_INTERFACE;
@@ -22,7 +37,7 @@ WebProgressListener.prototype = {
 
   // This method is called to indicate state changes.
   onStateChange: function(webProgress, request, stateFlags, status) {
-	const WPL = Components.interfaces.nsIWebProgressListener;
+	const WPL = Ci.nsIWebProgressListener;
 
 	var progress = $("#progress");
 
@@ -114,6 +129,10 @@ WebProgressListener.prototype = {
 function go() {
   var urlbar = document.getElementById("urlbar");
 
+  if (!start_uri && urlbar.value != null && urlbar.value != ''){
+	start_uri = ios.newURI(urlbar.value, null, null);
+	//dump(start_uri.host+', '+start_uri.path);
+  }
   browser.loadURI(urlbar.value, null, null);
 }
 
@@ -135,16 +154,138 @@ function reload_stop() {
   }
 }
 
+function setting() {
+  window.openDialog("chrome://ssb/content/preferences/preferences.xul", "",
+					"chrome,centerscreen,modal");
+
+}
+
+function isLinkExternal(href, internal_regexp) {
+
+  var uri = ios.newURI(href, null, null);
+
+  // Links from our host are always internal
+  if (/*uri.scheme == start_uri.scheme &&*/ uri.host == start_uri.host)
+    return false;
+
+  if (internal_regexp){
+
+  }
+
+  return true;
+}
+
+//クリックされた要素のリンク先を取得
+function hRefForClickEvent(aEvent, aDontCheckInputElement){
+  var href = null;
+  var isKeyCommand = (aEvent.type == "command");
+  var target =
+    isKeyCommand ? document.commandDispatcher.focusedElement : aEvent.target;
+
+  if (target instanceof HTMLAnchorElement ||
+      target instanceof HTMLAreaElement   ||
+      target instanceof HTMLLinkElement){
+    if (target.hasAttribute("href"))
+      href = target.href;
+  }else if (!aDontCheckInputElement && target instanceof HTMLInputElement){
+    if (target.form && target.form.action)
+      href = target.form.action;
+  }else{
+    // we may be nested inside of a link node
+    var linkNode = aEvent.originalTarget;
+    while (linkNode && !(linkNode instanceof HTMLAnchorElement))
+      linkNode = linkNode.parentNode;
+
+    if (linkNode)
+      href = linkNode.href;
+  }
+
+  return href;
+}
+
+function openExternalLink(href){
+  var extps = Cc["@mozilla.org/uriloader/external-protocol-service;1"].getService(Ci.nsIExternalProtocolService);
+  var uri = ios.newURI(href, null, null);
+
+  extps.loadURI(aURI, null);
+}
+
+//ブラウザ内クリックのハンドラ
+function click_handler(e){
+
+  var href = hRefForClickEvent(e, true);
+
+  /*
+  dump("click_handler\n");
+  e.preventDefault();
+  e.stopPropagation();
+  return false;
+   */
+
+  if (href && isLinkExternal(href)) {
+	dump("external link!!!\n");
+	openExternalLink(href);
+	e.preventDefault();
+    e.stopPropagation();
+	return false;
+  }
+
+  return true;
+  // Don't handle events that: a) aren't trusted, b) have already been
+  // handled or c) aren't left-click.
+  /*
+  if (!e.isTrusted || e.defaultPrevented || e.button)
+    return true;
+
+  let href = hRefForClickEvent(e, true);
+  if (href) {
+    let tab = document.getElementById("tabmail").selectedTab;
+    let preUri = tab.browser.currentURI;
+    let postUri = makeURI(href);
+
+    if (!this.protoSvc.isExposedProtocol(postUri.scheme) ||
+        postUri.schemeIs("http") || postUri.schemeIs("https")) {
+      if (!this._isInEngine(tab.currentEngine, preUri, postUri)) {
+        e.preventDefault();
+        openLinkExternally(href);
+      }
+    }
+  }
+  return false;
+*/
+}
 
 function onload() {
   var urlbar = document.getElementById("urlbar");
   urlbar.value = "http://www.mozilla.org/";
+  //urlbar.value = "http://www.yahoo.co.jp/";
+  //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
 
   listener = new WebProgressListener();
 
   browser = $("#browser")[0];
+  status_msg = $("#status")[0];
+  link_status = $("#link_status");
   browser.addProgressListener(listener,
 							  Components.interfaces.nsIWebProgress.NOTIFY_ALL);
+
+  //ブラウザ内クリックを捕捉
+  browser.addEventListener("click", click_handler, true);
+  browser.addEventListener("DOMActivate", click_handler, true);
+
+  browser.addEventListener('mouseover',
+						   function(e){
+							 var href = hRefForClickEvent(e);
+							 if(href){
+							   if(isLinkExternal(href)) link_status.show();
+							   else link_status.hide();
+
+							   status_msg.value = href;
+							 }else{
+							   link_status.hide();
+							   status_msg.value = "";
+							 }
+						   }, true);
 
   go();
 }
