@@ -9,7 +9,7 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 
 
 //TODO:
-// - リンククリック時にアドレスを確認、外部サイトの場合、標準ブラウザで開く
+// * リンククリック時にアドレスを確認、外部サイトの場合、標準ブラウザで開く
 //   - ホスト名チェックだけでなく、特定パターンとの照合を追加
 // - コマンドライン引数の読み取り
 // - 設定ウインドウの追加
@@ -207,7 +207,7 @@ function openExternalLink(href){
   var extps = Cc["@mozilla.org/uriloader/external-protocol-service;1"].getService(Ci.nsIExternalProtocolService);
   var uri = ios.newURI(href, null, null);
 
-  extps.loadURI(aURI, null);
+  extps.loadURI(uri, null);
 }
 
 //ブラウザ内クリックのハンドラ
@@ -223,7 +223,9 @@ function click_handler(e){
    */
 
   if (href && isLinkExternal(href)) {
-	dump("external link!!!\n");
+	//dump("external link!!!\n");
+
+	//外部リンクは標準ブラウザで処理する。
 	openExternalLink(href);
 	e.preventDefault();
     e.stopPropagation();
@@ -231,28 +233,6 @@ function click_handler(e){
   }
 
   return true;
-  // Don't handle events that: a) aren't trusted, b) have already been
-  // handled or c) aren't left-click.
-  /*
-  if (!e.isTrusted || e.defaultPrevented || e.button)
-    return true;
-
-  let href = hRefForClickEvent(e, true);
-  if (href) {
-    let tab = document.getElementById("tabmail").selectedTab;
-    let preUri = tab.browser.currentURI;
-    let postUri = makeURI(href);
-
-    if (!this.protoSvc.isExposedProtocol(postUri.scheme) ||
-        postUri.schemeIs("http") || postUri.schemeIs("https")) {
-      if (!this._isInEngine(tab.currentEngine, preUri, postUri)) {
-        e.preventDefault();
-        openLinkExternally(href);
-      }
-    }
-  }
-  return false;
-*/
 }
 
 function onload() {
