@@ -1,6 +1,7 @@
 pref("toolkit.defaultChromeURI", "chrome://ssb/content/ssbrowser.xul");
 
 pref("general.useragent.compatMode.firefox", true);
+pref("browser.preferences.instantApply", true);
 
 pref("browser.dom.window.dump.enabled", true);
 pref("javascript.options.showInConsole", true);

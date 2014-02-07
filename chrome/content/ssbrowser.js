@@ -160,7 +160,7 @@ function reload_stop() {
 
 function setting() {
   window.openDialog("chrome://ssb/content/preferences/preferences.xul", "",
-					"chrome,centerscreen,modal");
+					"chrome,centerscreen,modal,toolbar");
 
 }
 
