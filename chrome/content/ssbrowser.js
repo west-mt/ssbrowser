@@ -11,10 +11,9 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 
 
 //TODO:
-// - 設定ウインドウの追加
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
 //   - プロファイル自動生成
-// - アイコン設定、タイトル設定
+// - アイコン設定
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
@@ -260,6 +259,12 @@ function onload() {
 	urlbar.value = url;
   }else{
 	urlbar.value = 'chrome://ssb/content/usage.html';
+  }
+
+  var title = cmdLine.handleFlagWithParam("title", true);
+
+  if(title){
+	document.title = title;
   }
 
   var patt = cmdLine.handleFlagWithParam("include", true);
