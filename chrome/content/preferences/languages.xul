@@ -15,8 +15,7 @@
   <script type="application/javascript" src="chrome://ssb/content/utilityOverlay.js"/>
 
   <prefpane id="LanguagesDialogPane"
-            onpaneload="gLanguagesDialog.init();"
-            helpTopic="prefs-languages">
+            onpaneload="gLanguagesDialog.init();">
 
     <preferences>
       <preference id="intl.accept_languages" name="intl.accept_languages" type="wstring"/>
