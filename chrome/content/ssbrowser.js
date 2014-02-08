@@ -12,8 +12,8 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 
 //TODO:
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
-//   - プロファイル自動生成
-// - アイコン設定
+//   - プロファイル自動生成(今はプロファイルマネージャが開いてしまう)
+// - アイコン設定(Windowsで起動時)
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
@@ -105,7 +105,7 @@ WebProgressListener.prototype = {
 
 	var sec = document.getElementById("security");
 
-	
+
 	/*
 	if (state & WPL.STATE_IS_INSECURE) {
 	  sec.setAttribute("style", "display: none");
