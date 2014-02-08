@@ -105,6 +105,7 @@ WebProgressListener.prototype = {
 
 	var sec = document.getElementById("security");
 
+	
 	/*
 	if (state & WPL.STATE_IS_INSECURE) {
 	  sec.setAttribute("style", "display: none");
