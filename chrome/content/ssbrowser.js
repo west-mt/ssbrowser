@@ -8,12 +8,15 @@ var exclude_regexp = null;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
 
 //TODO:
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
 //   - プロファイル自動生成(今はプロファイルマネージャが開いてしまう)
 // - アイコン設定(Windowsで起動時)
+// - パスワード保存
+
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
@@ -251,6 +254,7 @@ function onload() {
   //urlbar.value = "http://www.mozilla.org/";
   //urlbar.value = "http://www.yahoo.co.jp/";
   //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
+  Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
   cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
 
