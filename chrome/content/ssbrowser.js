@@ -7,8 +7,13 @@ var include_regexp = null;
 var exclude_regexp = null;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const Cu = Components.utils;
+
 const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+
 
 
 //TODO:
@@ -254,7 +259,7 @@ function onload() {
   //urlbar.value = "http://www.mozilla.org/";
   //urlbar.value = "http://www.yahoo.co.jp/";
   //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
-  Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
+
 
   cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
 
@@ -292,8 +297,8 @@ function onload() {
 							  Components.interfaces.nsIWebProgress.NOTIFY_ALL);
 
   //ブラウザ内クリックを捕捉
-  browser.addEventListener("click", click_handler, true);
-  browser.addEventListener("DOMActivate", click_handler, true);
+  browser.addEventListener('click', click_handler, true);
+  browser.addEventListener('DOMActivate', click_handler, true);
 
   browser.addEventListener('mouseover',
 						   function(e){
@@ -307,6 +312,28 @@ function onload() {
 							   link_status.hide();
 							   status_msg.value = "";
 							 }
+						   }, true);
+
+
+  XPCOMUtils.defineLazyModuleGetter(browser,
+									"LoginManagerContent",
+									"resource://gre/modules/LoginManagerContent.jsm");
+
+  browser.addEventListener('DOMContentLoaded',
+						   function(event) {
+							 //dump("DOMContentLoaded "+browser.LoginManagerContent.onContentLoaded + "\n");
+							 dump('   '+event.type+'\n');
+							 browser.LoginManagerContent.onContentLoaded(event);
+						   });
+  browser.addEventListener('DOMAutoComplete',
+						   function(event) {
+							 dump('   '+event.type+'\n');
+							 browser.LoginManagerContent.onUsernameInput(event);
+						   });
+  browser.addEventListener('blur',
+						   function(event) {
+							 dump('   '+event.type+'\n');
+							 browser.LoginManagerContent.onUsernameInput(event);
 						   }, true);
 
   go();

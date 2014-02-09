@@ -1,4 +1,6 @@
 pref("toolkit.defaultChromeURI", "chrome://ssb/content/ssbrowser.xul");
+//pref("browser.chromeURL", "chrome://ssb/content/ssbrowser.xul");
+//pref("toolkit.singletonWindowType", "navigator:browser");
 
 pref("general.useragent.compatMode.firefox", true);
 pref("browser.preferences.instantApply", true);
@@ -11,9 +13,8 @@ pref("nglayout.debug.disable_xul_fastload", true);
 
 //Enable password manager
 pref("signon.rememberSignons", true);
-pref("signon.debug", true);
-pref("signon.expireMasterPassword", false);
-pref("signon.SignonFileName", "signons.txt");
+//pref("signon.debug", true);
+pref("signon.autofillForms", true);
 
 //Enable autocomplete
-pref("browser.formfill.enable", true);
+//pref("browser.formfill.enable", true);
