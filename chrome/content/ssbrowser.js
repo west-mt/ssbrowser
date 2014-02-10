@@ -317,22 +317,23 @@ function onload() {
 
   XPCOMUtils.defineLazyModuleGetter(browser,
 									"LoginManagerContent",
-									"resource://gre/modules/LoginManagerContent.jsm");
+									"chrome://ssb/content/modules/LoginManagerContent.jsm");
+
 
   browser.addEventListener('DOMContentLoaded',
 						   function(event) {
 							 //dump("DOMContentLoaded "+browser.LoginManagerContent.onContentLoaded + "\n");
-							 dump('   '+event.type+'\n');
+							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onContentLoaded(event);
 						   });
   browser.addEventListener('DOMAutoComplete',
 						   function(event) {
-							 dump('   '+event.type+'\n');
+							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onUsernameInput(event);
 						   });
   browser.addEventListener('blur',
 						   function(event) {
-							 dump('   '+event.type+'\n');
+							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onUsernameInput(event);
 						   }, true);
 
