@@ -12,3 +12,6 @@ _(path-to-firefox)_/firefox -app _(path-to-ssbrowser)_/application.ini [--no-rem
 OR:
 
 _(path-to-xulrunner)_/xulrunner _(path-to-ssbrowser)_/application.ini [--no-remote] -url (URL) _[-include (include-regexp)]_ _[-exclude (exclude-regexp)]_ _[-P (profile-name)]_ _[-title (window-title)]_
+
+If you will use multiple ssbrowser instance, add "--no-remote" option (and use different profiles).
+
