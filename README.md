@@ -1,7 +1,7 @@
 ssbrowser
 =========
 
-Site specific browser based on Firefox/XULRunner.
+Site specific browser based on Firefox/XULRunner.  
 You can view specific web site as an independent application.
 
 Usage
