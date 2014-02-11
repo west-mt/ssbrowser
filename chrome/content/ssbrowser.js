@@ -13,6 +13,7 @@ const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
 
 
@@ -250,6 +251,73 @@ function click_handler(e){
   return true;
 }
 
+
+function save_settings() {
+
+  var settings = {};
+  settings.version = "1";
+
+  // Pull out the window state
+  settings.window = {};
+
+  // save current fullscreen state and unfullscreen it for proper store of
+  // our window unfullscreen'ed
+  settings.window.fullscreen = window.fullScreen;
+  window.fullScreen = false;
+
+  settings.window.state = window.windowState;
+
+  if (window.windowState == window.STATE_NORMAL) {
+    settings.window.screenX = window.screenX;
+    settings.window.screenY = window.screenY;
+    settings.window.width = window.outerWidth;
+    settings.window.height = window.outerHeight;
+  }
+
+
+  // Save using JSON format
+  var nativeJSON = Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+  var json = nativeJSON.encode(settings);
+  var dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
+  var file = dirSvc.get("ProfD", Ci.nsIFile);
+
+  file.append("localstore.json");
+  FileIO.stringToFile(json, file);
+}
+
+function load_settings() {
+
+  // Load using JSON format
+  var settings;
+  var dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
+  var file = dirSvc.get("ProfD", Ci.nsIFile);
+
+  file.append("localstore.json");
+  if (file.exists()) {
+    var json = FileIO.fileToString(file);
+    var nativeJSON = Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
+
+    settings = nativeJSON.decode(json);
+
+    if (settings.window) {
+      switch (settings.window.state) {
+      case window.STATE_MAXIMIZED:
+        window.maximize();
+        break;
+      case window.STATE_MINIMIZED:
+        // Do nothing if window was closed minimized
+        break;
+      case window.STATE_NORMAL:
+        window.moveTo(settings.window.screenX, settings.window.screenY);
+        window.resizeTo(settings.window.width, settings.window.height);
+        break;
+      }
+      // if webapp was closed in fullscreen mode, it should relaunch as such.
+      window.fullScreen = settings.window.fullscreen;
+    }
+  }
+}
+
 function onload() {
   var urlbar = document.getElementById("urlbar");
   var cmdLine = window.arguments[0];
@@ -257,7 +325,6 @@ function onload() {
   //urlbar.value = "http://www.mozilla.org/";
   //urlbar.value = "http://www.yahoo.co.jp/";
   //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
-
 
   cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
 
@@ -334,8 +401,14 @@ function onload() {
 							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onUsernameInput(event);
 						   }, true);
+  window.addEventListener('close',
+						  function(event) {
+							save_settings();
+						  }, false);
 
   go();
+  setTimeout(function() { load_settings(); }, 0);
+
 }
 
 addEventListener("load", onload, false);
