@@ -14,6 +14,7 @@ const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("chrome://ssb/content/modules/FileIO.jsm");
+Cu.import("chrome://ssb/content/modules/CreateShortcut.jsm");
 
 
 
@@ -336,7 +337,6 @@ function onload() {
   }
 
   var title = cmdLine.handleFlagWithParam("title", true);
-  title = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
 
 
   if(title){
@@ -410,7 +410,7 @@ function onload() {
   go();
   setTimeout(function() { load_settings(); }, 0);
 
-
+  CreateShortcut();
 }
 
 addEventListener("load", onload, false);
