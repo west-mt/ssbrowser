@@ -20,7 +20,6 @@ Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 //TODO:
 // - 起動の仕組みを作成。ショートカット、スクリプトを生成
 //   - プロファイル自動生成(今はプロファイルマネージャが開いてしまう)
-// - ウインドウサイズの保存
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
@@ -337,6 +336,8 @@ function onload() {
   }
 
   var title = cmdLine.handleFlagWithParam("title", true);
+  title = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
+
 
   if(title){
 	document.title = title;
@@ -408,6 +409,7 @@ function onload() {
 
   go();
   setTimeout(function() { load_settings(); }, 0);
+
 
 }
 
