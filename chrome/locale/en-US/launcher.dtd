@@ -4,6 +4,6 @@
 <!ENTITY include_patt.label  "Include Pattern:">
 <!ENTITY include_patt.note   "Note: if include pattern is blank, check whether domain name is the same as start URL.">
 <!ENTITY exclude_patt.label  "Exclude Pattern:">
-<!ENTITY pattern.note        "Note: URL which matches include pattern AND does not match exclude pattern can be opened in SSBrowser.">
+<!ENTITY pattern.note        "Note: Only URL which matches include pattern AND does not match exclude pattern can be opened in SSBrowser.">
 
 <!ENTITY profile.label        "Profile">

@@ -9,7 +9,7 @@
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 		id="launcher" title="&dialog.title;"
 		buttons="accept,cancel"
-		buttonlabelcancel="Cancel"
+		buttonlabelcancel="Exit"
 		buttonlabelaccept="Generate Icon"
 		ondialogaccept="return onAccept();"
 		ondialogcancel="return onCancel();">
@@ -31,19 +31,17 @@
         </row>
         <row id="row_uri">
           <label control="start_url">&start_url.label;</label>
-          <textbox id="start_url"/>
+          <textbox id="start_url" onchange="return onChangeStartURL();"/>
         </row>
 		<separator class="thin"/>
-        <row id="row_include">
+        <row id="row_include" tooltiptext="&include_patt.note;">
           <label control="include_patt">&include_patt.label;</label>
-          <textbox id="include_patt"/>
+		  <textbox id="include_patt"/>
         </row>
-        <label class="note">&include_patt.note;</label>
-        <row id="row_exclude">
+        <row id="row_exclude" tooltiptext="&pattern.note;">
           <label control="exclude_patt">&exclude_patt.label;</label>
           <textbox id="exclude_patt"/>
         </row>
-		<label class="note">&pattern.note;</label>
       </rows>
     </grid>
   </groupbox>

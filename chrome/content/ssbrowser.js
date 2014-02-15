@@ -331,7 +331,7 @@ function onload() {
   if(launcher){
 	var x, y;
 
-	window.resizeTo(500, 600);
+	window.resizeTo(540, 600);
 
 	x = (window.screen.width-window.outerWidth)/2;
 	y = (window.screen.height-window.outerHeight)/2;
