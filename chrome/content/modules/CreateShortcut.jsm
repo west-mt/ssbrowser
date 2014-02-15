@@ -16,10 +16,19 @@ const PR_UINT32_MAX = 4294967295;
 
 
 const SHORTCUT_ALREADY_EXISTS = -2;
+const SHORTCUT_ERROR = -1;
 
 
 var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
+
   var OS = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
+
+  var dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
+  var chrome_dir = dirSvc.get("AChrom", Ci.nsIFile);
+
+
+  if(!target || !name || !args) return SHORTCUT_ERROR;
+  if(target=='' || name=='' || args=='') return SHORTCUT_ERROR;
 
   if(OS == 'Linux'){
 	Cu.import("chrome://ssb/content/modules/FileIO.jsm");
@@ -30,8 +39,16 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
 
       file.remove(false);
 	}
-	
+
     file.create(Ci.nsIFile.NORMAL_FILE_TYPE, PR_PERMS_FILE);
+
+	if(!icon){
+	  icon = chrome_dir.clone();
+	  icon.append('icons');
+	  icon.append('default');
+	  icon.append('ssbrowser.png');
+	}
+
 
     var cmd = "[Desktop Entry]\n";
     cmd += "Name=" + name + "\n";
@@ -48,6 +65,12 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
   }else if(OS == 'WINNT'){
 	Cu.import ("resource://gre/modules/ctypes.jsm");
 
+	if(!icon){
+	  icon = chrome_dir.clone();
+	  icon.append('icons');
+	  icon.append('default');
+	  icon.append('ssbrowser.ico');
+	}
 
   }else if(OS == 'Darwin'){
 	//NOT IMPLEMENTED!!

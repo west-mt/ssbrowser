@@ -14,7 +14,6 @@ const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("chrome://ssb/content/modules/FileIO.jsm");
-Cu.import("chrome://ssb/content/modules/CreateShortcut.jsm");
 
 
 
@@ -328,6 +327,20 @@ function onload() {
 
   cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
 
+  var launcher = cmdLine.handleFlag("launcher", true);
+  if(launcher){
+	var x, y;
+
+	window.resizeTo(500, 600);
+
+	x = (window.screen.width-window.outerWidth)/2;
+	y = (window.screen.height-window.outerHeight)/2;
+	window.moveTo(x, y);
+
+	window.location = "chrome://ssb/content/launcher.xul";
+	return;
+  }
+
   var url = cmdLine.handleFlagWithParam("url", true);
 
   if(url){
@@ -410,7 +423,6 @@ function onload() {
   go();
   setTimeout(function() { load_settings(); }, 0);
 
-  CreateShortcut();
 }
 
 addEventListener("load", onload, false);

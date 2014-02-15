@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://ssb/skin/launcher.css" type="text/css"?>
+
+
+<!DOCTYPE dialog SYSTEM "chrome://ssb/locale/launcher.dtd">
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		id="launcher" title="&dialog.title;"
+		buttons="accept,cancel"
+		buttonlabelcancel="Cancel"
+		buttonlabelaccept="Generate Icon"
+		ondialogaccept="return onAccept();"
+		ondialogcancel="return onCancel();">
+
+
+  <dialogheader title="SSBrowser Settings" description="Ganerate shortcut icon"/>
+
+  <groupbox>
+    <caption label="Web Application"/>
+    <grid>
+      <columns>
+        <column/>
+        <column flex="1"/>
+      </columns>
+      <rows>
+        <row id="row_name">
+          <label control="name">&name.label;</label>
+          <textbox id="name"/>
+        </row>
+        <row id="row_uri">
+          <label control="start_url">&start_url.label;</label>
+          <textbox id="start_url"/>
+        </row>
+		<separator class="thin"/>
+        <row id="row_include">
+          <label control="include_patt">&include_patt.label;</label>
+          <textbox id="include_patt"/>
+        </row>
+        <label class="note">&include_patt.note;</label>
+        <row id="row_exclude">
+          <label control="exclude_patt">&exclude_patt.label;</label>
+          <textbox id="exclude_patt"/>
+        </row>
+		<label class="note">&pattern.note;</label>
+      </rows>
+    </grid>
+  </groupbox>
+
+  <separator class="thin"/>
+  <groupbox>
+    <caption label="&profile.label;"/>
+    <checkbox id="desktop" label="desktop.label;"/>
+    <checkbox id="programs" label="programs.label;"/>
+    <checkbox id="quicklaunch" label="quicklaunch.label;"/>
+    <checkbox id="applications" label="applications.label;"/>
+    <separator class="thin"/>
+    <description class="indent">uninstall.hint;</description>
+  </groupbox>
+
+<!--
+  <separator class="thin"/>
+  <groupbox>
+    <caption label="shortcut.caption;"/>
+    <checkbox id="desktop" label="desktop.label;"/>
+    <checkbox id="programs" label="programs.label;"/>
+    <checkbox id="quicklaunch" label="quicklaunch.label;"/>
+    <checkbox id="applications" label="applications.label;"/>
+    <separator class="thin"/>
+    <description class="indent">uninstall.hint;</description>
+  </groupbox>
+  <groupbox>
+    <caption label="icon.caption;"/>
+    <description style="max-width:30em;">icon.hint;</description>
+    <separator class="thin"/>
+    <hbox align="top" style="height: 128px;">
+      <separator width="5px"/>
+      <image id="icon" style="max-width: 128px; max-height: 128px;"/>
+      <separator flex="1"/>
+      <button id="icon_source" type="menu" label="iconSettings.label;">
+        <menupopup>
+          <menuitem id="icon_favicon" type="radio" name="source" label="iconFavicon.label;" oncommand="InstallShortcut.useFavicon();"/>
+          <menuitem id="icon_file" type="radio" name="source" label="iconFile.label;" oncommand="InstallShortcut.useFile();"/>
+        </menupopup>
+      </button>
+    </hbox>
+  </groupbox>
+-->
+
+  <script type="application/javascript" src="chrome://ssb/content/jquery-1.10.2.min.js" />
+  <script type="application/javascript"
+          src="chrome://ssb/content/launcher.js" />
+
+</dialog>
