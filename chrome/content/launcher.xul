@@ -74,9 +74,7 @@
       <separator flex="1"/>
 
       <vbox flex="1">
-		<listbox id="profiles" rows="5" seltype="single"
-				 ondblclick="onProfilesDblClick(event)"
-				 onkeypress="onProfilesKey(event);">
+		<listbox id="profiles" rows="5" seltype="single">
 		</listbox>
       </vbox>
 	</hbox>

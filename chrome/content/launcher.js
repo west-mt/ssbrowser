@@ -66,17 +66,10 @@ function profile_startup(){
       listitem.setAttribute("tooltiptext", tooltiptext);
       listitem.setAttribute("class", "listitem-iconic");
       listitem.profile = profile;
-      try {
-        if (profile === gProfileService.selectedProfile) {
-          setTimeout(function(a) {
-            profilesElement.ensureElementIsVisible(a);
-            profilesElement.selectItem(a);
-          }, 0, listitem);
-        }
-      }
-      catch(e) { }
     }
-
+	try{
+	  profilesElement.selectedIndex = 0;
+	}catch(e) {}
     profilesElement.focus();
   }
   catch(e) {
