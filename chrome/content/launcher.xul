@@ -23,10 +23,10 @@
 		ondialogcancel="return onCancel();">
 
 
-  <dialogheader title="SSBrowser Settings" description="Ganerate shortcut icon"/>
+  <dialogheader title="SSBrowser Settings" description="Generate shortcut icon"/>
 
   <groupbox>
-    <caption label="Web Application"/>
+    <caption label="&wapp.label;"/>
     <grid>
       <columns>
         <column/>
@@ -64,11 +64,11 @@
 
       <vbox id="managebuttons">
 		<button id="newbutton" label="&newButton.label;"
-				accesskey="&newButton.accesskey;" oncommand="CreateProfileWizard();"/>
+				accesskey="&newButton.accesskey;" oncommand="createProf();"/>
 		<button id="renbutton" label="&renameButton.label;"
-				accesskey="&renameButton.accesskey;" oncommand="RenameProfile();"/>
+				accesskey="&renameButton.accesskey;" oncommand="renameProf();"/>
 		<button id="delbutton" label="&deleteButton.label;"
-				accesskey="&deleteButton.accesskey;" oncommand="ConfirmDelete();"/>
+				accesskey="&deleteButton.accesskey;" oncommand="deleteProf();"/>
       </vbox>
     
       <separator flex="1"/>
@@ -81,6 +81,34 @@
 
   </groupbox>
 
+  <separator class="thin"/>
+  <groupbox>
+    <caption label="&icon.label;"/>
+	<vbox class="profile-box indent" flex="1">
+	  <label>&create_icon.label;</label>
+	  <radiogroup>
+		<radio id="desktop" label="&desktop.label;" selected="true"/>
+		<hbox>
+		  <radio id="other_dir" label="&other_dir.label;"/>
+		  <button id="other_dir_choose" label="&choose_button.label;"
+				  oncommand="chooseButton();"/>
+		</hbox>
+	  </radiogroup>
+
+	  <separator class="thin"/>
+
+	  <hbox>
+		<image id="icon" src="chrome://icons/default/ssbrowser.png"
+			   style="max-width: 128px; max-height: 128px;"/>
+		<vbox>
+		  <button id="choose_icon" label="&choose_icon.label;"
+				  oncommand="chooseIcon();"/>
+		  <button id="use_default_icon" label="&use_default_icon.label;"
+				  oncommand="useDefaultIcon();"/>
+		</vbox>
+	  </hbox>
+	</vbox>
+  </groupbox>
 <!--
   <separator class="thin"/>
   <groupbox>

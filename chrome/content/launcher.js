@@ -13,15 +13,14 @@ var gProfileManagerBundle;
 var gBrandBundle;
 var gProfileService;
 
-
+//ショートカットを作成
 function onAccept(){
-  return false;
+  return false;  //ダイアログは閉じない
 }
 
 //ウインドウを閉じる
 function onCancel(){
-  gProfileService.flush();  //プロファイルリストを更新
-  return true;  //ダイアログを閉じる
+  return true;   //ダイアログを閉じる
 }
 
 function onChangeStartURL(){
@@ -39,8 +38,21 @@ function onChangeStartURL(){
 
 }
 
-Components.utils.import("resource://gre/modules/Services.jsm");
 
+function createProf(){
+  CreateProfileWizard();
+  gProfileService.flush();  //プロファイルリストを更新
+}
+
+function deleteProf(){
+  ConfirmDelete();
+  gProfileService.flush();  //プロファイルリストを更新
+}
+
+function renameProf(){
+  RenameProfile();
+  gProfileService.flush();  //プロファイルリストを更新
+}
 
 function profile_startup(){
 

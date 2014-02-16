@@ -6,4 +6,15 @@
 <!ENTITY exclude_patt.label  "Exclude Pattern:">
 <!ENTITY pattern.note        "Note: Only URL which matches include pattern AND does not match exclude pattern can be opened in SSBrowser.">
 
+<!ENTITY wapp.label           "Web Application">
 <!ENTITY profile.label        "Profile">
+<!ENTITY icon.label           "Icon">
+
+<!ENTITY create_icon.label    "Create icon on:">
+<!ENTITY desktop.label        "Desktop">
+<!ENTITY other_dir.label      "Other directory ">
+<!ENTITY choose_button.label  "Choose...">
+
+<!ENTITY choose_icon.label    "Choose icon...">
+<!ENTITY use_default_icon.label "Use default icon">
+
