@@ -221,8 +221,22 @@ function hRefForClickEvent(aEvent, aDontCheckInputElement){
 function openExternalLink(href){
   var extps = Cc["@mozilla.org/uriloader/external-protocol-service;1"].getService(Ci.nsIExternalProtocolService);
   var uri = ios.newURI(href, null, null);
+  var env = Components.classes["@mozilla.org/process/environment;1"].getService(Components.interfaces.nsIEnvironment);
 
+  var moz_no_remote;
+
+  if (env.exists('MOZ_NO_REMOTE'))
+	moz_no_remote = env.get('MOZ_NO_REMOTE');
+  else
+	moz_no_remote = '';
+
+  //-no-remote オプションを付けて起動するとブラウザ起動中に外部リンクを開けないため、環境変数を一時的に修正
+  env.set('MOZ_NO_REMOTE', '');
+  //dump('MOZ_NO_REMOTE = ' + env.get('MOZ_NO_REMOTE') + '\n');
   extps.loadURI(uri, null);
+
+  env.set('MOZ_NO_REMOTE', moz_no_remote);
+
 }
 
 //ブラウザ内クリックのハンドラ
