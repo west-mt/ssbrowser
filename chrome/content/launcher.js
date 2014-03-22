@@ -67,7 +67,7 @@ function onAccept(){
 	dst = dirSvc.get("Desk", Ci.nsIFile);
   }
 
-  dump("DST: " + dst.path + "\n");
+  alert("DST: " + dst.path + "\n");
 
   return false;  //ダイアログは閉じない
 }
