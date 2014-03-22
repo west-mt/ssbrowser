@@ -1,3 +1,5 @@
+@echo off
+
 rem Start "Launcher" "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" -app application.ini -no-remote -P default -launcher
 rem Start "Launcher" "C:\Program Files\Mozilla Firefox\firefox.exe" -app application.ini -no-remote -P default -launcher
 
