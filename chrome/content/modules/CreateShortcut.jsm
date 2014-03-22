@@ -53,7 +53,7 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
     cmd += "Name=" + name + "\n";
     cmd += "Type=Application\n";
     cmd += "Comment=Web Application\n";
-    cmd += "Exec=\"" + target.path + "\" " + args + "\n";
+    cmd += "Exec=" + target.path + " " + args + "\n";
     cmd += "Icon=" + icon.path + "\n";
 
     FileIO.stringToFile(cmd, file);

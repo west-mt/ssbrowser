@@ -18,7 +18,6 @@ var other_dir = null;
 
 //ショートカットを作成
 function onAccept(){
-  //TODO: 値のチェック、ショートカット作成コードを追加
   var target = '';
   var title = '';
   var url = '';
@@ -30,6 +29,7 @@ function onAccept(){
   var app_path = null;
   var args = '';
   const dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
+
 
   //値のチェック
   if ($('#name')[0].value.length == 0){
@@ -100,18 +100,15 @@ function onAccept(){
 
   //オプション組み立て
 
+  var appDir = dirSvc.get("GreD", Components.interfaces.nsILocalFile).clone();
   if(OS == 'Linux'){
-	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile).clone();
 	appDir.append("firefox");
-	target = appDir;
-	//target = 'firefox';
   }else if(OS == 'WINNT'){
-	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile).clone();
 	appDir.append("firefox.exe");
-	target = appDir;
   }else if(OS == 'Darwin'){
-	target = 'firefox';
+	appDir.append("firefox.exe");
   }
+  target = appDir;
 
   app_path = dirSvc.get("AChrom", Ci.nsIFile).parent.clone();
   app_path.append('application.ini');
