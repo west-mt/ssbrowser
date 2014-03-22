@@ -53,7 +53,7 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
     cmd += "Name=" + name + "\n";
     cmd += "Type=Application\n";
     cmd += "Comment=Web Application\n";
-    cmd += "Exec=\"" + target + "\" " + args + "\n";
+    cmd += "Exec=\"" + target.path + "\" " + args + "\n";
     cmd += "Icon=" + icon.path + "\n";
 
     FileIO.stringToFile(cmd, file);
@@ -62,7 +62,7 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
 
 
   }else if(OS == 'WINNT'){
-	Cu.import ("resource://gre/modules/ctypes.jsm");
+	Cu.import("chrome://ssb/content/modules/WindowsShortcutService.jsm");
 
     var file = dst_dir.clone();
 
@@ -72,7 +72,7 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
 
       file.remove(false);
 	}
-
+	setShortcut(file, target, null, args, null, icon);
 
   }else if(OS == 'Darwin'){
 	//NOT IMPLEMENTED!!

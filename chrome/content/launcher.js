@@ -101,11 +101,14 @@ function onAccept(){
   //オプション組み立て
 
   if(OS == 'Linux'){
-	target = 'firefox';
+	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile).clone();
+	appDir.append("firefox");
+	target = appDir;
+	//target = 'firefox';
   }else if(OS == 'WINNT'){
-	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile);
+	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile).clone();
 	appDir.append("firefox.exe");
-	target = appDir.path;
+	target = appDir;
   }else if(OS == 'Darwin'){
 	target = 'firefox';
   }
