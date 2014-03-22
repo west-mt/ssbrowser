@@ -1,5 +1,4 @@
 content ssb file:chrome/content/
-content icons file:chrome/icons/default/
 skin ssb classic/1.0 file:chrome/skin/
 locale  ssb en-US file:chrome/locale/en-US/
 locale  branding en-US file:chrome/locale/branding/
