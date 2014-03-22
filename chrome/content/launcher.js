@@ -233,7 +233,9 @@ function onLoad() {
   include_patt = $('#include_patt')[0];
   exclude_patt = $('#exclude_patt')[0];
 
+
   profile_startup();
+  $('#icon2').show();
 }
 
 addEventListener("load", onLoad, false);

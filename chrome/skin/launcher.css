@@ -9,3 +9,15 @@ row {
 .note {
 	font-size: 80%;
 }
+
+#icon {
+	width: 48px !important;
+	height: 48px !important;
+	max-width: 96px !important;
+	max-height: 96px !important;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #888888;
+}
+
+

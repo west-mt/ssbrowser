@@ -99,8 +99,10 @@
 	  <separator class="thin"/>
 
 	  <hbox>
-		<image id="icon" src="chrome://icons/default/ssbrowser.png"
-			   style="max-width: 128px; max-height: 128px;"/>
+		<vbox>
+		  <image id="icon" src="chrome://ssb/skin/ssbrowser.png"/>
+		  <spacer flex="1"/>
+		</vbox>
 		<vbox>
 		  <button id="choose_icon" label="&choose_icon.label;"
 				  oncommand="chooseIcon();"/>
