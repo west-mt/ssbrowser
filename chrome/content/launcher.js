@@ -3,9 +3,10 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+const prompts = Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService);
+const OS = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
 
 Cu.import("chrome://ssb/content/modules/CreateShortcut.jsm");
-
 
 var include_patt;
 var exclude_patt;
@@ -18,11 +19,17 @@ var other_dir = null;
 //ショートカットを作成
 function onAccept(){
   //TODO: 値のチェック、ショートカット作成コードを追加
-  var title = "";
-  var url = "";
-  var ipatt = "";
-  var epatt = "";
+  var target = '';
+  var title = '';
+  var url = '';
+  var ipatt = '';
+  var epatt = '';
+  var profile = '';
   var dst = null;
+  var icon = null;
+  var app_path = null;
+  var args = '';
+  const dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
 
   //値のチェック
   if ($('#name')[0].value.length == 0){
@@ -55,6 +62,14 @@ function onAccept(){
 	epatt = exclude_patt.value;
   }
 
+  try{
+	profile = $('#profiles')[0].selectedItem.label;
+  }catch(e){
+	alert("You must specify profile.");
+	return false;
+  }
+
+
   if ($('#other_dir')[0].selected == true && !other_dir){
 	alert("You must specify destination directory.");
 	return false;
@@ -63,11 +78,54 @@ function onAccept(){
   if($('#other_dir')[0].selected == true){
 	dst = other_dir;
   }else{
-	var dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
 	dst = dirSvc.get("Desk", Ci.nsIFile);
   }
+  //alert("DST: " + dst.path + "\n");
 
-  alert("DST: " + dst.path + "\n");
+  icon = dirSvc.get("AChrom", Ci.nsIFile).clone();
+  icon.append('icons');
+  icon.append('default');
+
+  if(OS == 'Linux'){
+	icon.append('ssbrowser.png');
+  }else if(OS == 'WINNT'){
+	icon.append('ssbrowser.ico');
+  }else if(OS == 'Darwin'){
+	alert("Sorry, we have not support your OS yet...");
+	return false;
+  }else{
+	alert("Sorry, we have not support your OS yet...");
+	return false;
+  }
+
+  //オプション組み立て
+
+  if(OS == 'Linux'){
+	target = 'firefox';
+  }else if(OS == 'WINNT'){
+	var appDir = dirSvc.get("CurProcD", Components.interfaces.nsILocalFile);
+	appDir.append("firefox.exe");
+	target = appDir.path;
+  }else if(OS == 'Darwin'){
+	target = 'firefox';
+  }
+
+  app_path = dirSvc.get("AChrom", Ci.nsIFile).parent.clone();
+  app_path.append('application.ini');
+
+  args = ' -app '+app_path.path+' -no-remote -url '+url+' -P '+profile+' -title \"'+title+'\"';
+  if(ipatt != '') args += ' -inculde \"' + ipatt + '\"';
+  if(epatt != '') args += ' -exculde \"' + epatt + '\"';
+
+  //dump(dst.path + '\n\n');
+  var rv = CreateShortcut(target, title, args, icon, dst, false);
+
+  if(rv == SHORTCUT_ALREADY_EXISTS){
+	var result = prompts.confirm(null, "Shortcut already exists", "Shortcut already exists. Overwrite?");
+
+	if(result == true) CreateShortcut(target, title, args, icon, dst, true);
+  }
+  //dump(args + '\n\n');
 
   return false;  //ダイアログは閉じない
 }

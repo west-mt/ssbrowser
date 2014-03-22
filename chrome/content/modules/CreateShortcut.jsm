@@ -3,6 +3,8 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
+Cu.import("chrome://ssb/content/modules/FileIO.jsm");
+
 EXPORTED_SYMBOLS = ["CreateShortcut", "SHORTCUT_ALREADY_EXISTS"];
 
 const PR_WRONLY = 0x02;
@@ -20,20 +22,25 @@ const SHORTCUT_ERROR = -1;
 
 
 var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
-
   var OS = Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS;
 
-  var dirSvc = Cc["@mozilla.org/file/directory_service;1"].getService(Ci.nsIProperties);
-  var chrome_dir = dirSvc.get("AChrom", Ci.nsIFile);
 
+  if(!target || !name || !args || !icon || !dst_dir) return SHORTCUT_ERROR;
+  if(target=='' || name=='' || args=='' || icon=='' || dst_dir=='') return SHORTCUT_ERROR;
 
-  if(!target || !name || !args) return SHORTCUT_ERROR;
-  if(target=='' || name=='' || args=='') return SHORTCUT_ERROR;
-
+  //dump('target: '+target+'\n');
+  //dump('name:   '+name+'\n');
+  //dump('args:   '+args+'\n');
+  //dump('ICON:   '+icon.path+'\n');
+  //dump('DST:    '+dst_dir.path+'\n');
   if(OS == 'Linux'){
-	Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
-    var file = dst_dir.append(name + ".desktop");
+    var file = dst_dir.clone();
+
+	file.append(name + ".desktop");
+    //var file = dst_dir.append(name);
+	//dump(file.path+'\n');
+
     if (file.exists()){
 	  if(!overwrite) return SHORTCUT_ALREADY_EXISTS;
 
@@ -42,19 +49,11 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
 
     file.create(Ci.nsIFile.NORMAL_FILE_TYPE, PR_PERMS_FILE);
 
-	if(!icon){
-	  icon = chrome_dir.clone();
-	  icon.append('icons');
-	  icon.append('default');
-	  icon.append('ssbrowser.png');
-	}
-
-
     var cmd = "[Desktop Entry]\n";
     cmd += "Name=" + name + "\n";
     cmd += "Type=Application\n";
     cmd += "Comment=Web Application\n";
-    cmd += "Exec=\"" + target.path + "\" " + args + "\n";
+    cmd += "Exec=\"" + target + "\" " + args + "\n";
     cmd += "Icon=" + icon.path + "\n";
 
     FileIO.stringToFile(cmd, file);
@@ -65,12 +64,15 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
   }else if(OS == 'WINNT'){
 	Cu.import ("resource://gre/modules/ctypes.jsm");
 
-	if(!icon){
-	  icon = chrome_dir.clone();
-	  icon.append('icons');
-	  icon.append('default');
-	  icon.append('ssbrowser.ico');
+    var file = dst_dir.clone();
+
+	file.append(name + ".lnk");
+    if (file.exists()){
+	  if(!overwrite) return SHORTCUT_ALREADY_EXISTS;
+
+      file.remove(false);
 	}
+
 
   }else if(OS == 'Darwin'){
 	//NOT IMPLEMENTED!!
