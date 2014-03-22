@@ -3,7 +3,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
-Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
 EXPORTED_SYMBOLS = ["CreateShortcut", "SHORTCUT_ALREADY_EXISTS"];
 
@@ -34,6 +33,7 @@ var CreateShortcut = function(target, name, args, icon, dst_dir, overwrite){
   //dump('ICON:   '+icon.path+'\n');
   //dump('DST:    '+dst_dir.path+'\n');
   if(OS == 'Linux'){
+	Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
     var file = dst_dir.clone();
 
