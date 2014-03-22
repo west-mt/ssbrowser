@@ -86,12 +86,13 @@
     <caption label="&icon.label;"/>
 	<vbox class="profile-box indent" flex="1">
 	  <label>&create_icon.label;</label>
-	  <radiogroup>
+	  <radiogroup id="dst_dir">
 		<radio id="desktop" label="&desktop.label;" selected="true"/>
 		<hbox>
 		  <radio id="other_dir" label="&other_dir.label;"/>
 		  <button id="other_dir_choose" label="&choose_button.label;"
-				  oncommand="chooseButton();"/>
+				  oncommand="chooseDirButton();"/>
+		  <label id="dir_name" width="100%"></label>
 		</hbox>
 	  </radiogroup>
 
