@@ -15,6 +15,7 @@ var gProfileManagerBundle;
 var gBrandBundle;
 var gProfileService;
 var other_dir = null;
+var icon_sel  = null;
 
 //ショートカットを作成
 function onAccept(){
@@ -75,6 +76,11 @@ function onAccept(){
 	return false;
   }
 
+  if ($('#other_icon')[0].selected == true && !icon_sel){
+	alert("You must specify icon file.");
+	return false;
+  }
+
   if($('#other_dir')[0].selected == true){
 	dst = other_dir;
   }else{
@@ -82,20 +88,24 @@ function onAccept(){
   }
   //alert("DST: " + dst.path + "\n");
 
-  icon = dirSvc.get("AChrom", Ci.nsIFile).clone();
-  icon.append('icons');
-  icon.append('default');
-
-  if(OS == 'Linux'){
-	icon.append('ssbrowser.png');
-  }else if(OS == 'WINNT'){
-	icon.append('ssbrowser.ico');
-  }else if(OS == 'Darwin'){
-	alert("Sorry, we have not support your OS yet...");
-	return false;
+  if($('#other_icon')[0].selected == true){
+	icon = icon_sel;
   }else{
-	alert("Sorry, we have not support your OS yet...");
-	return false;
+	icon = dirSvc.get("AChrom", Ci.nsIFile).clone();
+	icon.append('icons');
+	icon.append('default');
+
+	if(OS == 'Linux'){
+	  icon.append('ssbrowser.png');
+	}else if(OS == 'WINNT'){
+	  icon.append('ssbrowser.ico');
+	}else if(OS == 'Darwin'){
+	  alert("Sorry, we have not support your OS yet...");
+	  return false;
+	}else{
+	  alert("Sorry, we have not support your OS yet...");
+	  return false;
+	}
   }
 
   //オプション組み立て
@@ -174,6 +184,30 @@ function chooseDirButton(){
   }
 }
 
+function chooseIconButton(){
+  const nsIFilePicker = Ci.nsIFilePicker;
+
+  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+
+  fp.init(window, "Choose icon", nsIFilePicker.modeOpen);
+
+  if(OS == 'Linux'){
+	fp.appendFilter("Icon file", "*.png");
+  }else if(OS == 'WINNT'){
+	fp.appendFilter("Icon file", "*.ico");
+  }
+
+  var rv = fp.show();
+  if (rv == nsIFilePicker.returnOK) {
+	var file = fp.file;
+	var path = fp.file.path;
+
+	//dump(path);
+	$('#icon_name')[0].value = path;
+	icon_sel = file;
+	$('#icon_sel')[0].selectedItem = $('#other_icon')[0];
+  }
+}
 
 function createProf(){
   CreateProfileWizard();

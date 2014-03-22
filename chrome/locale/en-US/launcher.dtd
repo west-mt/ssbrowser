@@ -15,6 +15,11 @@
 <!ENTITY other_dir.label      "Other directory ">
 <!ENTITY choose_button.label  "Choose...">
 
+<!ENTITY use_icon.label       "Use:">
+<!ENTITY default_icon.label   "SSBrowser's default icon">
+<!ENTITY other_icon.label      "Other icon ">
+<!ENTITY choose_button.label  "Choose...">
+
 <!ENTITY choose_icon.label    "Choose icon...">
 <!ENTITY use_default_icon.label "Use default icon">
 

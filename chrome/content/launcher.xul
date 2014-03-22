@@ -98,6 +98,17 @@
 
 	  <separator class="thin"/>
 
+	  <label>&use_icon.label;</label>
+	  <radiogroup id="icon_sel">
+		<radio id="default_icon" label="&default_icon.label;" selected="true"/>
+		<hbox>
+		  <radio id="other_icon" label="&other_icon.label;"/>
+		  <button id="other_icon_choose" label="&choose_button.label;"
+				  oncommand="chooseIconButton();"/>
+		  <label id="icon_name" width="100%"></label>
+		</hbox>
+	  </radiogroup>
+	  <!--
 	  <hbox>
 		<vbox>
 		  <image id="icon" src="chrome://ssb/skin/ssbrowser.png"/>
@@ -110,36 +121,9 @@
 				  oncommand="useDefaultIcon();"/>
 		</vbox>
 	  </hbox>
+	  -->
 	</vbox>
   </groupbox>
-<!--
-  <separator class="thin"/>
-  <groupbox>
-    <caption label="shortcut.caption;"/>
-    <checkbox id="desktop" label="desktop.label;"/>
-    <checkbox id="programs" label="programs.label;"/>
-    <checkbox id="quicklaunch" label="quicklaunch.label;"/>
-    <checkbox id="applications" label="applications.label;"/>
-    <separator class="thin"/>
-    <description class="indent">uninstall.hint;</description>
-  </groupbox>
-  <groupbox>
-    <caption label="icon.caption;"/>
-    <description style="max-width:30em;">icon.hint;</description>
-    <separator class="thin"/>
-    <hbox align="top" style="height: 128px;">
-      <separator width="5px"/>
-      <image id="icon" style="max-width: 128px; max-height: 128px;"/>
-      <separator flex="1"/>
-      <button id="icon_source" type="menu" label="iconSettings.label;">
-        <menupopup>
-          <menuitem id="icon_favicon" type="radio" name="source" label="iconFavicon.label;" oncommand="InstallShortcut.useFavicon();"/>
-          <menuitem id="icon_file" type="radio" name="source" label="iconFile.label;" oncommand="InstallShortcut.useFile();"/>
-        </menupopup>
-      </button>
-    </hbox>
-  </groupbox>
--->
 
   <script type="application/javascript" src="chrome://ssb/content/jquery-1.10.2.min.js" />
   <script type="application/javascript"
