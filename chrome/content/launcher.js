@@ -15,6 +15,8 @@ var gProfileService;
 
 //ショートカットを作成
 function onAccept(){
+  //TODO: 値のチェック、ショートカット作成コードを追加
+
   return false;  //ダイアログは閉じない
 }
 
@@ -25,6 +27,7 @@ function onCancel(){
 
 function onChangeStartURL(){
   //パターンが指定されていない場合、ホスト名を自動入力
+  /*
   if (include_patt.value == ''){
 	try{
 	  var uri = ios.newURI(start_url.value, null, null);
@@ -35,6 +38,7 @@ function onChangeStartURL(){
 	  //Do nothing
 	}
   }
+   */
 
 }
 
