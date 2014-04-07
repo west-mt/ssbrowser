@@ -269,7 +269,15 @@ function onLoad() {
 
 
   profile_startup();
-  $('#icon2').show();
+  //$('#icon2').show();
+
+  window.sizeToContent();
+
+  var x, y;
+  x = (window.screen.width-window.outerWidth)/2;
+  y = (window.screen.height-window.outerHeight)/2;
+  window.moveTo(x, y);
+
 }
 
 addEventListener("load", onLoad, false);

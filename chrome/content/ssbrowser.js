@@ -352,6 +352,7 @@ function onload() {
 	window.moveTo(x, y);
 
 	window.location = "chrome://ssb/content/launcher.xul";
+
 	return;
   }
 
