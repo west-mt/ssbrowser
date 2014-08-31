@@ -24,8 +24,15 @@
       <textbox id="urlbar" value="" flex="1" readonly="true" onchange="go();"/>
     </hbox>
 
+	<popup id="contentAreaContextMenu">
+<!--
+	  <menuitem label="Insert"/>
+	  <menuitem label="Delete"/>
+-->
+	</popup>
 
 	<browser id="browser" type="content-primary" flex="1"
+			 context="contentAreaContextMenu"
 			 autocompletepopup="PopupAutoComplete"/>
 
     <hbox class="bottombar">

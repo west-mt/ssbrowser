@@ -18,8 +18,6 @@ Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
 
 //TODO:
-// - 起動の仕組みを作成。ショートカット、スクリプトを生成
-//   - プロファイル自動生成(今はプロファイルマネージャが開いてしまう)
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
@@ -92,7 +90,6 @@ WebProgressListener.prototype = {
   onLocationChange: function(webProgress, request, location) {
 	var urlbar = document.getElementById("urlbar");
 	urlbar.value = location.spec;
-
 
 	$(".back").attr({disabled: !browser.canGoBack});
 	$(".forward").attr({disabled: !browser.canGoForward});
@@ -416,11 +413,26 @@ function onload() {
 
   browser.addEventListener('DOMContentLoaded',
 						   function(event) {
-							 //dump("DOMContentLoaded "+browser.LoginManagerContent.onContentLoaded + "\n");
 							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onContentLoaded(event);
+
+							 //Remove target attribute of links
+							 var doc = event.originalTarget;
+							 $.each(doc.getElementsByTagName('base'),
+									function(){
+									  if(this.target){
+										this.removeAttribute('target');
+									  }
+									});
+
+							 $.each(doc.getElementsByTagName('a'),
+									function(){
+									  if(this.target){
+										this.removeAttribute('target');
+																			  }
+									});
 						   });
-  browser.addEventListener('DOMAutoComplete',
+    browser.addEventListener('DOMAutoComplete',
 						   function(event) {
 							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onUsernameInput(event);
