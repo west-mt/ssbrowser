@@ -95,20 +95,19 @@ for info in zipf.infolist():
                 orig_md5 = hashlib.md5(open(fname, 'rb').read()).hexdigest()
 
                 if zip_md5 != orig_md5:
-                    if fname == binary_fname:
-                        print '** %s updated. **' % binary_fname
-                        os.rename(binary_fname, old_binary_fname)
-
-                        print '  %s has been renamed to \"%s\".' % (binary_fname, old_binary_fname)
-                        print '  You can remove %s manually, or it will be removed automatically in the next time.' % old_binary_fname
-                        continue
-
                     r = 'n'
                     if not overwrite:
                         r = prompt('Update modified file "'+fname+'"? (y/N/all)')
                         if r == 'all':
                             overwrite = True
                     if r == 'y' or overwrite:
+                        if fname == binary_fname:
+                            print '** %s updated. **' % binary_fname
+                            os.rename(binary_fname, old_binary_fname)
+
+                            print '  %s has been renamed to \"%s\".' % (binary_fname, old_binary_fname)
+                            print '  You can remove %s manually, or it will be automatically removed in the next time.' % old_binary_fname
+
                         data = zipf.read(info)
                         open(fname, 'wb').write(data)
                         print 'Update: ' + fname
