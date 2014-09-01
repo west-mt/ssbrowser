@@ -18,6 +18,38 @@ def prompt(msg):
     r = raw_input()
     return r
 
+def chunk_report(bytes_so_far, chunk_size, total_size):
+    if total_size > 0:
+        percent = float(bytes_so_far) / total_size * 100
+        sys.stdout.write('Downloaded %d / %d bytes (%0.2f%%)\r' % 
+                         (bytes_so_far, total_size, percent))
+    else:
+        sys.stdout.write('Downloaded %d bytes (%0.2f%%)\r' % bytes_so_far)
+
+
+def chunk_read(response, chunk_size=8192, report_hook=None):
+    try:
+        total_size = int(response.info().getheader('Content-Length').strip())
+    except:
+        total_size = 0
+
+    bytes_so_far = 0
+    data = ''
+
+    while True:
+        chunk = response.read(chunk_size)
+        bytes_so_far += len(chunk)
+
+        if not chunk:
+            break
+
+        data += chunk
+        if report_hook:
+            report_hook(bytes_so_far, chunk_size, total_size)
+
+    sys.stdout.write('\n\n')
+    return data
+
 
 if os.path.exists('.git'):
     print 'This directory is git repository!'
@@ -47,7 +79,8 @@ tempf = tempfile.NamedTemporaryFile(delete=True)
 print 'Downloading zip file from Github...'
 try:
     response = urllib2.urlopen(url[0])
-    data = response.read()
+    #data = response.read()
+    data = chunk_read(response, report_hook=chunk_report)
 except URLError, e:
     print "Download error occurred:"
     print "    " + e.reason
