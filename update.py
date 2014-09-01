@@ -27,6 +27,11 @@ if os.path.exists('.git'):
 
 info_fname = 'update_info.json'
 binary_fname = 'update.exe'
+old_binary_fname = 'update.exe.OLD'
+
+
+if os.path.exists(old_binary_fname):
+    os.remove(old_binary_fname)
 
 url = json.load(open(info_fname))
 
@@ -92,7 +97,10 @@ for info in zipf.infolist():
                 if zip_md5 != orig_md5:
                     if fname == binary_fname:
                         print '** %s updated. **' % binary_fname
-                        print '  Please download from Github.'
+                        os.rename(binary_fname, old_binary_fname)
+
+                        print '  %s has been renamed to \"%s\".' % (binary_fname, old_binary_fname)
+                        print '  You can remove %s manually, or it will be removed automatically in the next time.' % old_binary_fname
                         continue
 
                     r = 'n'
