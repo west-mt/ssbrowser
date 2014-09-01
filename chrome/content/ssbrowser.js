@@ -420,7 +420,7 @@ function onload() {
 							 var doc = event.originalTarget;
 							 $.each(doc.getElementsByTagName('base'),
 									function(){
-									  if(this.target){
+									  if(this.target && this.target != ''){
 										this.removeAttribute('target');
 									  }
 									});
