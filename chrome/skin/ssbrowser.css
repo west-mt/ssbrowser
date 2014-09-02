@@ -55,6 +55,22 @@
   -moz-image-region: rect(0px 53px 17px 36px);
 }
 
+.zoomup {
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 305px 17px 288px);
+}
+.zoomup[disabled="true"] {
+  opacity: 0.3;
+}
+
+.zoomdown {
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 287px 17px 270px);
+}
+.zoomdown[disabled="true"] {
+  opacity: 0.3;
+}
+
 .setting {
   list-style-image: url("chrome://ssb/skin/toolbar2.png");
   -moz-image-region: rect(0px 467px 17px 450px);
