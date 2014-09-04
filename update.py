@@ -81,7 +81,7 @@ try:
     response = urllib2.urlopen(url[0])
     #data = response.read()
     data = chunk_read(response, report_hook=chunk_report)
-except URLError, e:
+except urllib2.URLError, e:
     print "Download error occurred:"
     print "    " + e.reason
     prompt('===\nPress any key...')

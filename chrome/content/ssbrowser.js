@@ -159,6 +159,14 @@ function reload_stop() {
   }
 }
 
+function zoom_up(){
+
+}
+
+function zoom_down(){
+
+}
+
 function setting() {
   window.openDialog("chrome://ssb/content/preferences/preferences.xul", "",
 					"chrome,centerscreen,modal,toolbar");
