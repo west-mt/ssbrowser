@@ -12,6 +12,9 @@ const Cu = Components.utils;
 const ios =	Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 
+const zoom_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0];
+var zoom_index = 7;
+
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 
@@ -160,11 +163,43 @@ function reload_stop() {
 }
 
 function zoom_up(){
+  if (zoom_index < zoom_list.length-1){
+	zoom_index += 1;
+	browser.markupDocumentViewer.fullZoom = zoom_list[zoom_index];
+  }
 
+  if (zoom_index >= zoom_list.length-1){
+	$(".zoomup").attr({disabled: true});
+	$(".zoomdown").attr({disabled: false});
+	zoom_index = zoom_list.length-1;
+  }else if (zoom_index <= 0){
+	$(".zoomup").attr({disabled: false});
+	$(".zoomdown").attr({disabled: true});
+	zoom_index = 0;
+  }else{
+	$(".zoomup").attr({disabled: false});
+	$(".zoomdown").attr({disabled: false});
+  }
 }
 
 function zoom_down(){
+  if (zoom_index > 0){
+	zoom_index -= 1;
+	browser.markupDocumentViewer.fullZoom = zoom_list[zoom_index];
+  }
 
+  if (zoom_index >= zoom_list.length-1){
+	$(".zoomup").attr({disabled: true});
+	$(".zoomdown").attr({disabled: false});
+	zoom_index = zoom_list.length-1;
+  }else if (zoom_index <= 0){
+	$(".zoomup").attr({disabled: false});
+	$(".zoomdown").attr({disabled: true});
+	zoom_index = 0;
+  }else{
+	$(".zoomup").attr({disabled: false});
+	$(".zoomdown").attr({disabled: false});
+  }
 }
 
 function setting() {
