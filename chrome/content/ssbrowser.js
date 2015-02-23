@@ -372,54 +372,58 @@ function load_settings() {
 }
 
 function onload() {
+  dump('window.arguments: ' + window.arguments + '\n');
   var urlbar = document.getElementById("urlbar");
-  var cmdLine = window.arguments[0];
 
   //urlbar.value = "http://www.mozilla.org/";
   //urlbar.value = "http://www.yahoo.co.jp/";
   //urlbar.value = 'file:///home/gaku/work/webapps/apps/static/index.html';
 
-  cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
+  if(window.arguments){
+	var cmdLine = window.arguments[0];
 
-  var launcher = cmdLine.handleFlag("launcher", true);
-  if(launcher){
-	var x, y;
+	cmdLine = cmdLine.QueryInterface(Components.interfaces.nsICommandLine);
 
-	window.resizeTo(540, 600);
+	var launcher = cmdLine.handleFlag("launcher", true);
+	if(launcher){
+	  var x, y;
 
-	x = (window.screen.width-window.outerWidth)/2;
-	y = (window.screen.height-window.outerHeight)/2;
-	window.moveTo(x, y);
+	  window.resizeTo(540, 600);
 
-	window.location = "chrome://ssb/content/launcher.xul";
+	  x = (window.screen.width-window.outerWidth)/2;
+	  y = (window.screen.height-window.outerHeight)/2;
+	  window.moveTo(x, y);
 
-	return;
-  }
+	  window.location = "chrome://ssb/content/launcher.xul";
 
-  var url = cmdLine.handleFlagWithParam("url", true);
+	  return;
+	}
 
-  if(url){
-	urlbar.value = url;
-  }else{
-	urlbar.value = 'chrome://ssb/content/usage.html';
-  }
+	var url = cmdLine.handleFlagWithParam("url", true);
 
-  var title = cmdLine.handleFlagWithParam("title", true);
+	if(url){
+	  urlbar.value = url;
+	}else{
+	  urlbar.value = 'chrome://ssb/content/usage.html';
+	}
+
+	var title = cmdLine.handleFlagWithParam("title", true);
 
 
-  if(title){
-	document.title = title;
-  }
+	if(title){
+	  document.title = title;
+	}
 
-  var patt = cmdLine.handleFlagWithParam("include", true);
+	var patt = cmdLine.handleFlagWithParam("include", true);
 
-  if(patt){
-	include_regexp = new RegExp(patt);
-  }
+	if(patt){
+	  include_regexp = new RegExp(patt);
+	}
 
-  var expatt = cmdLine.handleFlagWithParam("exclude", true);
-  if(expatt){
-	exclude_regexp = new RegExp(expatt);
+	var expatt = cmdLine.handleFlagWithParam("exclude", true);
+	if(expatt){
+	  exclude_regexp = new RegExp(expatt);
+	}
   }
 
   listener = new WebProgressListener();
@@ -493,6 +497,23 @@ function onload() {
   go();
   setTimeout(function() { load_settings(); }, 0);
 
+  /*
+  dump('browser.open: '+ browser.open+'\n');
+  browser.contentWindow.open = function (open) {
+    return function (url, name, features) {
+      // set name if missing here
+	  dump('window.open: '+url+', '+name+', '+features);
+      name = name || "default_window_name";
+      return open.call(browser.contentWindow, url, name, features);
+    };
+  }(browser.contentWindow.open);
+
+  browser.contentWindow.open = function(url, name, features){
+	dump('window.open: '+url+', '+name+', '+features);
+  };
+
+  dump('browser.contentWindow: ' + browser.contentWindow.open+'\n');
+   */
 }
 
 addEventListener("load", onload, false);
