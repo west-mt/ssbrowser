@@ -18,3 +18,6 @@ pref("signon.autofillForms", true);
 
 //Enable autocomplete
 //pref("browser.formfill.enable", true);
+
+//pref("browser.link.open_newwindow", 1);
+//pref("browser.link.open_newwindow.restriction", 0);

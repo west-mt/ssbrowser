@@ -2,9 +2,6 @@ var browser;
 var listener;
 var status_msg;
 var link_status;
-var start_uri = null;
-var include_regexp = null;
-var exclude_regexp = null;
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
@@ -17,8 +14,16 @@ var zoom_index = 7;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("chrome://ssb/content/modules/FileIO.jsm");
+Cu.import("chrome://ssb/content/modules/SSBrowserInfo.jsm");
 
 
+function obj_dump(obj){
+  var txt = '';
+  for (var one in obj){
+	txt += "  " + one + ": " + obj[one] + "\n";
+  }
+  dump(txt);
+}
 
 //TODO:
 
@@ -137,8 +142,8 @@ WebProgressListener.prototype = {
 function go() {
   var urlbar = document.getElementById("urlbar");
 
-  if (!start_uri && urlbar.value != null && urlbar.value != ''){
-	start_uri = ios.newURI(urlbar.value, null, null);
+  if (!SSBrowserInfo.start_uri && urlbar.value != null && urlbar.value != ''){
+	SSBrowserInfo.start_uri = ios.newURI(urlbar.value, null, null);
 	//dump(start_uri.host+', '+start_uri.path);
   }
   browser.loadURI(urlbar.value, null, null);
@@ -224,7 +229,7 @@ function isLinkExternal(href, internal_regexp) {
   var uri = ios.newURI(href, null, null);
 
   // Links from our host are always internal
-  if (/*uri.scheme == start_uri.scheme &&*/ uri.host == start_uri.host)
+  if (/*uri.scheme == start_uri.scheme &&*/ uri.host == SSBrowserInfo.start_uri.host)
     return false;
 
   return true;
@@ -373,6 +378,10 @@ function load_settings() {
 
 function onload() {
   dump('window.arguments: ' + window.arguments + '\n');
+  dump('window.opener: ' + window.opener + '\n');
+  dump('browser: ' + browser + '\n');
+  dump('TestModule.x: ' + TestModule.x + '\n');
+  TestModule.x = 1000000;
   var urlbar = document.getElementById("urlbar");
 
   //urlbar.value = "http://www.mozilla.org/";
@@ -411,24 +420,26 @@ function onload() {
 
 
 	if(title){
+	  SSBrowserInfo.title = title;
 	  document.title = title;
 	}
 
 	var patt = cmdLine.handleFlagWithParam("include", true);
 
 	if(patt){
-	  include_regexp = new RegExp(patt);
+	  SSBrowserInfo.include_regexp = new RegExp(patt);
 	}
 
 	var expatt = cmdLine.handleFlagWithParam("exclude", true);
 	if(expatt){
-	  exclude_regexp = new RegExp(expatt);
+	  SSBrowserInfo.exclude_regexp = new RegExp(expatt);
 	}
   }
 
   listener = new WebProgressListener();
 
   browser = $("#browser")[0];
+  //dump('++ browser: ' + browser + '\n');
   status_msg = $("#status")[0];
   link_status = $("#link_status");
   browser.addProgressListener(listener,
@@ -478,8 +489,16 @@ function onload() {
 										this.removeAttribute('target');
 																			  }
 									});
+							 //dump('window:\n');
+							 //obj_dump(doc.defaultView.window);
+							 doc.open =
+							   function(url, name, features){
+								 dump('window.open: '+url+', '+name+', '+features);
+							   };
+							 //dump(doc.defaultView.window.open);
+							 //obj_dump(doc);
 						   });
-    browser.addEventListener('DOMAutoComplete',
+  browser.addEventListener('DOMAutoComplete',
 						   function(event) {
 							 //dump('   '+event.type+'\n');
 							 browser.LoginManagerContent.onUsernameInput(event);
@@ -497,7 +516,10 @@ function onload() {
   go();
   setTimeout(function() { load_settings(); }, 0);
 
-  /*
+  //dump('a\n');
+  dump('parent: ' + window.parent.arguments + '\n');
+
+	/*
   dump('browser.open: '+ browser.open+'\n');
   browser.contentWindow.open = function (open) {
     return function (url, name, features) {
