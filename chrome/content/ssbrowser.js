@@ -216,14 +216,14 @@ function setting() {
 function isLinkExternal(href, internal_regexp) {
 
   //パターンが指定されている場合、除外パターン→該当パターンの順に判定
-  if(exclude_regexp){
-	if (exclude_regexp.test(href)) return true;
+  if(SSBrowserInfo.exclude_regexp){
+	if (SSBrowserInfo.exclude_regexp.test(href)) return true;
   }
-  if(include_regexp){
-	if (include_regexp.test(href)) return false;
+  if(SSBrowserInfo.include_regexp){
+	if (SSBrowserInfo.include_regexp.test(href)) return false;
   }
 
-  if(include_regexp || exclude_regexp) return true;
+  if(SSBrowserInfo.include_regexp || SSBrowserInfo.exclude_regexp) return true;
 
   //パターンが指定されていない場合、ホスト名で判定
   var uri = ios.newURI(href, null, null);
@@ -377,11 +377,9 @@ function load_settings() {
 }
 
 function onload() {
-  dump('window.arguments: ' + window.arguments + '\n');
-  dump('window.opener: ' + window.opener + '\n');
-  dump('browser: ' + browser + '\n');
-  dump('TestModule.x: ' + TestModule.x + '\n');
-  TestModule.x = 1000000;
+  //dump('window.arguments: ' + window.arguments + '\n');
+  //dump('window.opener: ' + window.opener + '\n');
+  //dump('browser: ' + browser + '\n');
   var urlbar = document.getElementById("urlbar");
 
   //urlbar.value = "http://www.mozilla.org/";
@@ -489,14 +487,6 @@ function onload() {
 										this.removeAttribute('target');
 																			  }
 									});
-							 //dump('window:\n');
-							 //obj_dump(doc.defaultView.window);
-							 doc.open =
-							   function(url, name, features){
-								 dump('window.open: '+url+', '+name+', '+features);
-							   };
-							 //dump(doc.defaultView.window.open);
-							 //obj_dump(doc);
 						   });
   browser.addEventListener('DOMAutoComplete',
 						   function(event) {
@@ -514,28 +504,10 @@ function onload() {
 						  }, false);
 
   go();
-  setTimeout(function() { load_settings(); }, 0);
+  if(window.arguments){
+	setTimeout(function() { load_settings(); }, 0);
+  }
 
-  //dump('a\n');
-  dump('parent: ' + window.parent.arguments + '\n');
-
-	/*
-  dump('browser.open: '+ browser.open+'\n');
-  browser.contentWindow.open = function (open) {
-    return function (url, name, features) {
-      // set name if missing here
-	  dump('window.open: '+url+', '+name+', '+features);
-      name = name || "default_window_name";
-      return open.call(browser.contentWindow, url, name, features);
-    };
-  }(browser.contentWindow.open);
-
-  browser.contentWindow.open = function(url, name, features){
-	dump('window.open: '+url+', '+name+', '+features);
-  };
-
-  dump('browser.contentWindow: ' + browser.contentWindow.open+'\n');
-   */
 }
 
 addEventListener("load", onload, false);
