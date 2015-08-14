@@ -139,6 +139,42 @@ WebProgressListener.prototype = {
   }
 };
 
+
+var MyWindowCreator = {
+
+  QueryInterface: function(iid) {
+	if (iid.equals(Ci.nsIWindowCreator) ||
+		iid.equals(Ci.nsIWindowCreator2) ||
+		iid.equals(Ci.nsISupports))
+	  return this;
+
+	throw Components.results.NS_ERROR_NO_INTERFACE;
+  },
+
+  createChromeWindow : function(parent, chromeFlags) {
+    // Always use the app runner implementation
+    return this._windowCreator.createChromeWindow(parent, chromeFlags);
+  },
+
+
+  createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, cancel) {
+    if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
+      // Use default app to open external URIs
+	  openExternalLink(uri.spec);
+      cancel.value = true;
+	  return null;
+    }
+    else {
+      return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
+        createChromeWindow2(parent, chromeFlags, contextFlags, uri, cancel);
+    }
+  },
+
+  _windowCreator : Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIWindowCreator)
+
+};
+
+
 function go() {
   var urlbar = document.getElementById("urlbar");
 
@@ -146,6 +182,8 @@ function go() {
 	SSBrowserInfo.start_uri = ios.newURI(urlbar.value, null, null);
 	//dump(start_uri.host+', '+start_uri.path);
   }
+
+  //dump('go URL: '+ urlbar.value+ '\n');
   browser.loadURI(urlbar.value, null, null);
 }
 
@@ -213,7 +251,7 @@ function setting() {
 
 }
 
-function isLinkExternal(href, internal_regexp) {
+function isLinkExternal(href) {
 
   //パターンが指定されている場合、除外パターン→該当パターンの順に判定
   if(SSBrowserInfo.exclude_regexp){
@@ -503,7 +541,14 @@ function onload() {
 							save_settings();
 						  }, false);
 
+
+  //Catch window.open()
+  var windowWatcher = Cc["@mozilla.org/embedcomp/window-watcher;1"].getService(Ci.nsIWindowWatcher);
+  windowWatcher.setWindowCreator(MyWindowCreator);
+
+
   go();
+
   if(window.arguments){
 	setTimeout(function() { load_settings(); }, 0);
   }

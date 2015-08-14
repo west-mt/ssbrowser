@@ -1,6 +1,6 @@
 pref("toolkit.defaultChromeURI", "chrome://ssb/content/ssbrowser.xul");
 pref("browser.chromeURL", "chrome://ssb/content/ssbrowser.xul");
-//pref("toolkit.singletonWindowType", "navigator:browser");
+pref("toolkit.singletonWindowType", "navigator:browser");
 
 pref("general.useragent.compatMode.firefox", true);
 pref("browser.preferences.instantApply", true);
