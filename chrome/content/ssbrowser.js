@@ -162,7 +162,7 @@ var MyWindowCreator = {
       // Use default app to open external URIs
 	  openExternalLink(uri.spec);
       cancel.value = true;
-	  return null;
+	  //return null;
     }
     else {
       return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
@@ -270,6 +270,7 @@ function isLinkExternal(href) {
   if (/*uri.scheme == start_uri.scheme &&*/ uri.host == SSBrowserInfo.start_uri.host)
     return false;
 
+  //dump("isLinkExternal: "+href+" -> true\n");
   return true;
 }
 
