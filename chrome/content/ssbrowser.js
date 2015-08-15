@@ -338,7 +338,7 @@ function click_handler(e){
 
   var href = hRefForClickEvent(e, true);
 
-  dump("click_handler\n");
+  if(href) dump("click_handler: "+href+"\n");
   /*
   dump("click_handler\n");
   e.preventDefault();
