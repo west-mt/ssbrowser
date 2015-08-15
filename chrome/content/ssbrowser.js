@@ -157,7 +157,7 @@ var MyWindowCreator = {
   },
 
 
-  createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, cancel) {
+  createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, tabparent, cancel) {
 
 
     if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
@@ -168,7 +168,7 @@ var MyWindowCreator = {
     }
     else {
       return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
-        createChromeWindow2(parent, chromeFlags, contextFlags, uri, cancel);
+        createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
     }
   },
 
