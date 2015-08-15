@@ -153,12 +153,14 @@ var MyWindowCreator = {
 
   createChromeWindow : function(parent, chromeFlags) {
     // Always use the app runner implementation
+	dump("createChromeWindow\n");
     return this._windowCreator.createChromeWindow(parent, chromeFlags);
   },
 
 
   createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, tabparent, cancel) {
 
+	dump("createChromeWindow2: " + uri.spec + "\n");
 
     if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
       // Use default app to open external URIs
