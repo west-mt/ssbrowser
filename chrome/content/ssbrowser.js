@@ -164,11 +164,13 @@ var MyWindowCreator = {
 
     if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
       // Use default app to open external URIs
+	  dump("openExternalLink: " + uri.spec + "\n");
 	  openExternalLink(uri.spec);
       cancel.value = true;
 	  return null;
     }
     else {
+	  dump("_windowCreator::createChromeWindow2: " + uri.spec + "\n");
       return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
         createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
     }
