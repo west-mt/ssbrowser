@@ -158,11 +158,13 @@ var MyWindowCreator = {
 
 
   createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, cancel) {
+
+
     if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
       // Use default app to open external URIs
 	  openExternalLink(uri.spec);
       cancel.value = true;
-	  //return null;
+	  return null;
     }
     else {
       return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
@@ -308,6 +310,8 @@ function openExternalLink(href){
   var env = Components.classes["@mozilla.org/process/environment;1"].getService(Components.interfaces.nsIEnvironment);
 
   var moz_no_remote;
+
+  alert("openExternalLink: "+href);
 
   if (env.exists('MOZ_NO_REMOTE'))
 	moz_no_remote = env.get('MOZ_NO_REMOTE');
