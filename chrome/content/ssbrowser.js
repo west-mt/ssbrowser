@@ -272,7 +272,7 @@ function isLinkExternal(href) {
   if (/*uri.scheme == start_uri.scheme &&*/ uri.host == SSBrowserInfo.start_uri.host)
     return false;
 
-  dump("isLinkExternal: "+href+" -> true\n");
+  //dump("isLinkExternal: "+href+" -> true\n");
   return true;
 }
 
@@ -311,7 +311,7 @@ function openExternalLink(href){
 
   var moz_no_remote;
 
-  alert("openExternalLink: "+href);
+  //alert("openExternalLink: "+href);
 
   if (env.exists('MOZ_NO_REMOTE'))
 	moz_no_remote = env.get('MOZ_NO_REMOTE');
