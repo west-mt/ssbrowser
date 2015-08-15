@@ -161,21 +161,22 @@ var MyWindowCreator = {
   createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, tabparent, cancel) {
 
 	//dump("createChromeWindow2: " + uri.spec + "\n");
-
-
-    if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
-      // Use default app to open external URIs
-	  dump("openExternalLink: " + uri.spec + "\n");
-	  openExternalLink(uri.spec);
-      cancel.value = true;
-	  return null;
-    }
-    else {
-	  dump("_windowCreator::createChromeWindow2: " + uri.spec + "\n");
-	  return null;
-      //return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
-      //  createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
-    }
+    if (uri && (uri.scheme != "chrome")) {
+      if (isLinkExternal(uri.spec)) {
+		// Use default app to open external URIs
+		dump("openExternalLink: " + uri.spec + "\n");
+		openExternalLink(uri.spec);
+		cancel.value = true;
+		return null;
+      }
+      else {
+		dump("_windowCreator::createChromeWindow2: " + uri.spec + "\n");
+		//return null;
+		return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
+		  createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
+      }
+	}
+	return null;
   },
 
   _windowCreator : Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIWindowCreator)
