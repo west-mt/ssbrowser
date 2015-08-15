@@ -160,7 +160,8 @@ var MyWindowCreator = {
 
   createChromeWindow2 : function(parent, chromeFlags, contextFlags, uri, tabparent, cancel) {
 
-	dump("createChromeWindow2: " + uri.spec + "\n");
+	//dump("createChromeWindow2: " + uri.spec + "\n");
+
 
     if (uri && (uri.scheme != "chrome") && isLinkExternal(uri.spec)) {
       // Use default app to open external URIs
@@ -171,8 +172,9 @@ var MyWindowCreator = {
     }
     else {
 	  dump("_windowCreator::createChromeWindow2: " + uri.spec + "\n");
-      return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
-        createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
+	  return null;
+      //return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
+      //  createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
     }
   },
 
