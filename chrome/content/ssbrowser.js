@@ -166,7 +166,7 @@ var MyWindowCreator = {
 		// Use default app to open external URIs
 		dump("openExternalLink: " + uri.spec + "\n");
 		openExternalLink(uri.spec);
-		cancel.value = true;
+		if(cancel) cancel.value = true;
 		return null;
       }
       else {
@@ -175,6 +175,9 @@ var MyWindowCreator = {
 		return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
 		  createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
       }
+	} else {
+	  return this._windowCreator.QueryInterface(Ci.nsIWindowCreator2).
+		createChromeWindow2(parent, chromeFlags, contextFlags, uri, tabparent, cancel);
 	}
 	return null;
   },
