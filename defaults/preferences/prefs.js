@@ -21,3 +21,6 @@ pref("signon.autofillForms", true);
 
 //pref("browser.link.open_newwindow", 1);
 //pref("browser.link.open_newwindow.restriction", 0);
+
+pref("browser.download.show_plugins_in_list", true);
+pref("browser.download.hide_plugins_without_extensions", false);

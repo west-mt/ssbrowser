@@ -58,9 +58,10 @@
               src="chrome://browser/content/preferences/security.xul"/>
     <prefpane id="paneSync" label="&paneSync.title;"
               src="chrome://browser/content/preferences/sync.xul"/>
-
+-->
     <prefpane id="paneApplications" label="&paneApplications.title;"
               src="chrome://ssb/content/preferences/applications.xul"/>
+<!--
     <prefpane id="paneAdvanced" label="&paneAdvanced.title;"
               src="chrome://ssb/content/preferences/advanced.xul"/>
 -->

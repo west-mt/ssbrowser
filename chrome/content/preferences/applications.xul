@@ -7,13 +7,14 @@
 
 <!DOCTYPE overlay [
   <!ENTITY % brandDTD SYSTEM "chrome://branding/locale/brand.dtd">
-  <!ENTITY % applicationsDTD SYSTEM "chrome://browser/locale/preferences/applications.dtd">
+  <!ENTITY % applicationsDTD SYSTEM "chrome://ssb/locale/preferences/applications.dtd">
   %brandDTD;
   %applicationsDTD;
 ]>
 
 <overlay id="ApplicationsPaneOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <stringbundle id="bundlePreferences" src="chrome://ssb/locale/preferences/preferences.properties"/>
 
   <prefpane id="paneApplications"
             onpaneload="gApplicationsPane.init();"
@@ -65,7 +66,8 @@
                   type="bool"/>
     </preferences>
 
-    <script type="application/javascript" src="chrome://browser/content/preferences/applications.js"/>
+    <script type="application/javascript" src="chrome://ssb/content/preferences/applications.js"/>
+
 
     <keyset>
       <key key="&focusSearch1.key;" modifiers="accel" oncommand="gApplicationsPane.focusFilterBox();"/>

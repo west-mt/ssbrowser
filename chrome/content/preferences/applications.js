@@ -27,7 +27,7 @@ const TOPIC_PDFJS_HANDLER_CHANGED = "pdfjs:handlerChanged";
 const PREF_DISABLED_PLUGIN_TYPES = "plugin.disable_full_page_plugin_for_types";
 
 // Preferences that affect which entries to show in the list.
-const PREF_SHOW_PLUGINS_IN_LIST = "browser.download.show_plugins_in_list";
+//const PREF_SHOW_PLUGINS_IN_LIST = "browser.download.show_plugins_in_list";
 const PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS =
   "browser.download.hide_plugins_without_extensions";
 
@@ -108,7 +108,7 @@ function getLocalHandlerApp(aFile) {
  * An enumeration of items in a JS array.
  *
  * FIXME: use ArrayConverter once it lands (bug 380839).
- * 
+ *
  * @constructor
  */
 function ArrayEnumerator(aItems) {
@@ -139,14 +139,14 @@ function isFeedType(t) {
  * This object wraps nsIHandlerInfo with some additional functionality
  * the Applications prefpane needs to display and allow modification of
  * the list of handled types.
- * 
+ *
  * We create an instance of this wrapper for each entry we might display
  * in the prefpane, and we compose the instances from various sources,
  * including navigator.plugins and the handler service.
  *
  * We don't implement all the original nsIHandlerInfo functionality,
  * just the stuff that the prefpane needs.
- * 
+ *
  * In theory, all of the custom functionality in this wrapper should get
  * pushed down into nsIHandlerInfo eventually.
  */
@@ -194,6 +194,9 @@ HandlerInfoWrapper.prototype = {
 
     if (this.primaryExtension) {
       var extension = this.primaryExtension.toUpperCase();
+    var bundlePreferences = document.getElementById("bundlePreferences");
+	  //dump("% "+extension+"\n");
+	  //dump(this.element("bundlePreferences").getString("fileEnding")+"\n");
       return this.element("bundlePreferences").getFormattedString("fileEnding",
                                                                   [extension]);
     }
@@ -438,360 +441,6 @@ HandlerInfoWrapper.prototype = {
 };
 
 
-//****************************************************************************//
-// Feed Handler Info
-
-/**
- * This object implements nsIHandlerInfo for the feed types.  It's a separate
- * object because we currently store handling information for the feed type
- * in a set of preferences rather than the nsIHandlerService-managed datastore.
- * 
- * This object inherits from HandlerInfoWrapper in order to get functionality
- * that isn't special to the feed type.
- * 
- * XXX Should we inherit from HandlerInfoWrapper?  After all, we override
- * most of that wrapper's properties and methods, and we have to dance around
- * the fact that the wrapper expects to have a wrappedHandlerInfo, which we
- * don't provide.
- */
-
-function FeedHandlerInfo(aMIMEType) {
-  HandlerInfoWrapper.call(this, aMIMEType, null);
-}
-
-FeedHandlerInfo.prototype = {
-  __proto__: HandlerInfoWrapper.prototype,
-
-  //**************************************************************************//
-  // Convenience Utils
-
-  _converterSvc:
-    Cc["@mozilla.org/embeddor.implemented/web-content-handler-registrar;1"].
-    getService(Ci.nsIWebContentConverterService),
-
-  _shellSvc:
-//@line 494 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-    getShellService(),
-//@line 498 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-
-
-  //**************************************************************************//
-  // nsIHandlerInfo
-
-  get description() {
-    return this.element("bundlePreferences").getString(this._appPrefLabel);
-  },
-
-  get preferredApplicationHandler() {
-    switch (this.element(this._prefSelectedReader).value) {
-      case "client":
-        var file = this.element(this._prefSelectedApp).value;
-        if (file)
-          return getLocalHandlerApp(file);
-
-        return null;
-
-      case "web":
-        var uri = this.element(this._prefSelectedWeb).value;
-        if (!uri)
-          return null;
-        return this._converterSvc.getWebContentHandlerByURI(this.type, uri);
-
-      case "bookmarks":
-      default:
-        // When the pref is set to bookmarks, we handle feeds internally,
-        // we don't forward them to a local or web handler app, so there is
-        // no preferred handler.
-        return null;
-    }
-  },
-
-  set preferredApplicationHandler(aNewValue) {
-    if (aNewValue instanceof Ci.nsILocalHandlerApp) {
-      this.element(this._prefSelectedApp).value = aNewValue.executable;
-      this.element(this._prefSelectedReader).value = "client";
-    }
-    else if (aNewValue instanceof Ci.nsIWebContentHandlerInfo) {
-      this.element(this._prefSelectedWeb).value = aNewValue.uri;
-      this.element(this._prefSelectedReader).value = "web";
-      // Make the web handler be the new "auto handler" for feeds.
-      // Note: we don't have to unregister the auto handler when the user picks
-      // a non-web handler (local app, Live Bookmarks, etc.) because the service
-      // only uses the "auto handler" when the selected reader is a web handler.
-      // We also don't have to unregister it when the user turns on "always ask"
-      // (i.e. preview in browser), since that also overrides the auto handler.
-      this._converterSvc.setAutoHandler(this.type, aNewValue);
-    }
-  },
-
-  _possibleApplicationHandlers: null,
-
-  get possibleApplicationHandlers() {
-    if (this._possibleApplicationHandlers)
-      return this._possibleApplicationHandlers;
-
-    // A minimal implementation of nsIMutableArray.  It only supports the two
-    // methods its callers invoke, namely appendElement and nsIArray::enumerate.
-    this._possibleApplicationHandlers = {
-      _inner: [],
-      _removed: [],
-
-      QueryInterface: function(aIID) {
-        if (aIID.equals(Ci.nsIMutableArray) ||
-            aIID.equals(Ci.nsIArray) ||
-            aIID.equals(Ci.nsISupports))
-          return this;
-
-        throw Cr.NS_ERROR_NO_INTERFACE;
-      },
-
-      get length() {
-        return this._inner.length;
-      },
-
-      enumerate: function() {
-        return new ArrayEnumerator(this._inner);
-      },
-
-      appendElement: function(aHandlerApp, aWeak) {
-        this._inner.push(aHandlerApp);
-      },
-
-      removeElementAt: function(aIndex) {
-        this._removed.push(this._inner[aIndex]);
-        this._inner.splice(aIndex, 1);
-      },
-
-      queryElementAt: function(aIndex, aInterface) {
-        return this._inner[aIndex].QueryInterface(aInterface);
-      }
-    };
-
-    // Add the selected local app if it's different from the OS default handler.
-    // Unlike for other types, we can store only one local app at a time for the
-    // feed type, since we store it in a preference that historically stores
-    // only a single path.  But we display all the local apps the user chooses
-    // while the prefpane is open, only dropping the list when the user closes
-    // the prefpane, for maximum usability and consistency with other types.
-    var preferredAppFile = this.element(this._prefSelectedApp).value;
-    if (preferredAppFile) {
-      let preferredApp = getLocalHandlerApp(preferredAppFile);
-      let defaultApp = this._defaultApplicationHandler;
-      if (!defaultApp || !defaultApp.equals(preferredApp))
-        this._possibleApplicationHandlers.appendElement(preferredApp, false);
-    }
-
-    // Add the registered web handlers.  There can be any number of these.
-    var webHandlers = this._converterSvc.getContentHandlers(this.type);
-    for each (let webHandler in webHandlers)
-      this._possibleApplicationHandlers.appendElement(webHandler, false);
-
-    return this._possibleApplicationHandlers;
-  },
-
-  __defaultApplicationHandler: undefined,
-  get _defaultApplicationHandler() {
-    if (typeof this.__defaultApplicationHandler != "undefined")
-      return this.__defaultApplicationHandler;
-
-    var defaultFeedReader = null;
-//@line 621 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-    try {
-      defaultFeedReader = this._shellSvc.defaultFeedReader;
-    }
-    catch(ex) {
-      // no default reader or _shellSvc is null
-    }
-//@line 628 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-
-    if (defaultFeedReader) {
-      let handlerApp = Cc["@mozilla.org/uriloader/local-handler-app;1"].
-                       createInstance(Ci.nsIHandlerApp);
-      handlerApp.name = getFileDisplayName(defaultFeedReader);
-      handlerApp.QueryInterface(Ci.nsILocalHandlerApp);
-      handlerApp.executable = defaultFeedReader;
-
-      this.__defaultApplicationHandler = handlerApp;
-    }
-    else {
-      this.__defaultApplicationHandler = null;
-    }
-
-    return this.__defaultApplicationHandler;
-  },
-
-  get hasDefaultHandler() {
-//@line 647 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-    try {
-      if (this._shellSvc.defaultFeedReader)
-        return true;
-    }
-    catch(ex) {
-      // no default reader or _shellSvc is null
-    }
-//@line 655 "/build/buildd/firefox-25.0.1+build1/browser/components/preferences/applications.js"
-
-    return false;
-  },
-
-  get defaultDescription() {
-    if (this.hasDefaultHandler)
-      return this._defaultApplicationHandler.name;
-
-    // Should we instead return null?
-    return "";
-  },
-
-  // What to do with content of this type.
-  get preferredAction() {
-    switch (this.element(this._prefSelectedAction).value) {
-
-      case "bookmarks":
-        return Ci.nsIHandlerInfo.handleInternally;
-
-      case "reader": {
-        let preferredApp = this.preferredApplicationHandler;
-        let defaultApp = this._defaultApplicationHandler;
-
-        // If we have a valid preferred app, return useSystemDefault if it's
-        // the default app; otherwise return useHelperApp.
-        if (gApplicationsPane.isValidHandlerApp(preferredApp)) {
-          if (defaultApp && defaultApp.equals(preferredApp))
-            return Ci.nsIHandlerInfo.useSystemDefault;
-
-          return Ci.nsIHandlerInfo.useHelperApp;
-        }
-
-        // The pref is set to "reader", but we don't have a valid preferred app.
-        // What do we do now?  Not sure this is the best option (perhaps we
-        // should direct the user to the default app, if any), but for now let's
-        // direct the user to live bookmarks.
-        return Ci.nsIHandlerInfo.handleInternally;
-      }
-
-      // If the action is "ask", then alwaysAskBeforeHandling will override
-      // the action, so it doesn't matter what we say it is, it just has to be
-      // something that doesn't cause the controller to hide the type.
-      case "ask":
-      default:
-        return Ci.nsIHandlerInfo.handleInternally;
-    }
-  },
-
-  set preferredAction(aNewValue) {
-    switch (aNewValue) {
-
-      case Ci.nsIHandlerInfo.handleInternally:
-        this.element(this._prefSelectedReader).value = "bookmarks";
-        break;
-
-      case Ci.nsIHandlerInfo.useHelperApp:
-        this.element(this._prefSelectedAction).value = "reader";
-        // The controller has already set preferredApplicationHandler
-        // to the new helper app.
-        break;
-
-      case Ci.nsIHandlerInfo.useSystemDefault:
-        this.element(this._prefSelectedAction).value = "reader";
-        this.preferredApplicationHandler = this._defaultApplicationHandler;
-        break;
-    }
-  },
-
-  get alwaysAskBeforeHandling() {
-    return this.element(this._prefSelectedAction).value == "ask";
-  },
-
-  set alwaysAskBeforeHandling(aNewValue) {
-    if (aNewValue == true)
-      this.element(this._prefSelectedAction).value = "ask";
-    else
-      this.element(this._prefSelectedAction).value = "reader";
-  },
-
-  // Whether or not we are currently storing the action selected by the user.
-  // We use this to suppress notification-triggered updates to the list when
-  // we make changes that may spawn such updates, specifically when we change
-  // the action for the feed type, which results in feed preference updates,
-  // which spawn "pref changed" notifications that would otherwise cause us
-  // to rebuild the view unnecessarily.
-  _storingAction: false,
-
-
-  //**************************************************************************//
-  // nsIMIMEInfo
-
-  get primaryExtension() {
-    return "xml";
-  },
-
-
-  //**************************************************************************//
-  // Storage
-
-  // Changes to the preferred action and handler take effect immediately
-  // (we write them out to the preferences right as they happen),
-  // so we when the controller calls store() after modifying the handlers,
-  // the only thing we need to store is the removal of possible handlers
-  // XXX Should we hold off on making the changes until this method gets called?
-  store: function() {
-    for each (let app in this._possibleApplicationHandlers._removed) {
-      if (app instanceof Ci.nsILocalHandlerApp) {
-        let pref = this.element(PREF_FEED_SELECTED_APP);
-        var preferredAppFile = pref.value;
-        if (preferredAppFile) {
-          let preferredApp = getLocalHandlerApp(preferredAppFile);
-          if (app.equals(preferredApp))
-            pref.reset();
-        }
-      }
-      else {
-        app.QueryInterface(Ci.nsIWebContentHandlerInfo);
-        this._converterSvc.removeContentHandler(app.contentType, app.uri);
-      }
-    }
-    this._possibleApplicationHandlers._removed = [];
-  },
-
-
-  //**************************************************************************//
-  // Icons
-
-  get smallIcon() {
-    return this._smallIcon;
-  }
-
-};
-
-var feedHandlerInfo = {
-  __proto__: new FeedHandlerInfo(TYPE_MAYBE_FEED),
-  _prefSelectedApp: PREF_FEED_SELECTED_APP, 
-  _prefSelectedWeb: PREF_FEED_SELECTED_WEB, 
-  _prefSelectedAction: PREF_FEED_SELECTED_ACTION, 
-  _prefSelectedReader: PREF_FEED_SELECTED_READER,
-  _smallIcon: "chrome://browser/skin/feeds/feedIcon16.png",
-  _appPrefLabel: "webFeed"
-}
-
-var videoFeedHandlerInfo = {
-  __proto__: new FeedHandlerInfo(TYPE_MAYBE_VIDEO_FEED),
-  _prefSelectedApp: PREF_VIDEO_FEED_SELECTED_APP, 
-  _prefSelectedWeb: PREF_VIDEO_FEED_SELECTED_WEB, 
-  _prefSelectedAction: PREF_VIDEO_FEED_SELECTED_ACTION, 
-  _prefSelectedReader: PREF_VIDEO_FEED_SELECTED_READER,
-  _smallIcon: "chrome://browser/skin/feeds/videoFeedIcon16.png",
-  _appPrefLabel: "videoPodcastFeed"
-}
-
-var audioFeedHandlerInfo = {
-  __proto__: new FeedHandlerInfo(TYPE_MAYBE_AUDIO_FEED),
-  _prefSelectedApp: PREF_AUDIO_FEED_SELECTED_APP, 
-  _prefSelectedWeb: PREF_AUDIO_FEED_SELECTED_WEB, 
-  _prefSelectedAction: PREF_AUDIO_FEED_SELECTED_ACTION, 
-  _prefSelectedReader: PREF_AUDIO_FEED_SELECTED_READER,
-  _smallIcon: "chrome://browser/skin/feeds/audioFeedIcon16.png",
-  _appPrefLabel: "audioPodcastFeed"
-}
 
 /**
  * InternalHandlerInfoWrapper provides a basic mechanism to create an internal
@@ -829,7 +478,8 @@ var pdfHandlerInfo = {
   _handlerChanged: TOPIC_PDFJS_HANDLER_CHANGED,
   _appPrefLabel: "portableDocumentFormat",
   get enabled() {
-    return !Services.prefs.getBoolPref(PREF_PDFJS_DISABLED);
+	//dump(Services.prefs.prefHasUserValue(PREF_PDFJS_DISABLED)+"\n");
+    return Services.prefs.prefHasUserValue(PREF_PDFJS_DISABLED) && !Services.prefs.getBoolPref(PREF_PDFJS_DISABLED);
   },
 };
 
@@ -841,7 +491,7 @@ var gApplicationsPane = {
   // The set of types the app knows how to handle.  A hash of HandlerInfoWrapper
   // objects, indexed by type.
   _handledTypes: {},
-  
+
   // The list of types we can show, sorted by the sort column/direction.
   // An array of HandlerInfoWrapper objects.  We build this list when we first
   // load the data and then rebuild it when users change a pref that affects
@@ -896,7 +546,7 @@ var gApplicationsPane = {
 
     // Observe preferences that influence what we display so we can rebuild
     // the view when they change.
-    this._prefSvc.addObserver(PREF_SHOW_PLUGINS_IN_LIST, this, false);
+    //this._prefSvc.addObserver(PREF_SHOW_PLUGINS_IN_LIST, this, false);
     this._prefSvc.addObserver(PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS, this, false);
     this._prefSvc.addObserver(PREF_FEED_SELECTED_APP, this, false);
     this._prefSvc.addObserver(PREF_FEED_SELECTED_WEB, this, false);
@@ -928,7 +578,7 @@ var gApplicationsPane = {
       // column, we should remove it.
       document.getElementById("typeColumn").removeAttribute("sortDirection");
     }
-    else 
+    else
       this._sortColumn = document.getElementById("typeColumn");
 
     // Load the data and build the list of handlers.
@@ -953,7 +603,7 @@ var gApplicationsPane = {
 
   destroy: function() {
     window.removeEventListener("unload", this, false);
-    this._prefSvc.removeObserver(PREF_SHOW_PLUGINS_IN_LIST, this);
+    //this._prefSvc.removeObserver(PREF_SHOW_PLUGINS_IN_LIST, this);
     this._prefSvc.removeObserver(PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS, this);
     this._prefSvc.removeObserver(PREF_FEED_SELECTED_APP, this);
     this._prefSvc.removeObserver(PREF_FEED_SELECTED_WEB, this);
@@ -994,7 +644,7 @@ var gApplicationsPane = {
     if (aTopic == "nsPref:changed" && !this._storingAction) {
       // These two prefs alter the list of visible types, so we have to rebuild
       // that list when they change.
-      if (aData == PREF_SHOW_PLUGINS_IN_LIST ||
+      if (/*aData == PREF_SHOW_PLUGINS_IN_LIST ||*/
           aData == PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS) {
         this._rebuildVisibleTypes();
         this._sortVisibleTypes();
@@ -1021,21 +671,9 @@ var gApplicationsPane = {
   // Composed Model Construction
 
   _loadData: function() {
-    this._loadFeedHandler();
     this._loadInternalHandlers();
     this._loadPluginHandlers();
     this._loadApplicationHandlers();
-  },
-
-  _loadFeedHandler: function() {
-    this._handledTypes[TYPE_MAYBE_FEED] = feedHandlerInfo;
-    feedHandlerInfo.handledOnlyByPlugin = false;
-
-    this._handledTypes[TYPE_MAYBE_VIDEO_FEED] = videoFeedHandlerInfo;
-    videoFeedHandlerInfo.handledOnlyByPlugin = false;
-
-    this._handledTypes[TYPE_MAYBE_AUDIO_FEED] = audioFeedHandlerInfo;
-    audioFeedHandlerInfo.handledOnlyByPlugin = false;
   },
 
   /**
@@ -1123,13 +761,15 @@ var gApplicationsPane = {
     this._visibleTypeDescriptionCount = {};
 
     // Get the preferences that help determine what types to show.
-    var showPlugins = this._prefSvc.getBoolPref(PREF_SHOW_PLUGINS_IN_LIST);
+    //var showPlugins = this._prefSvc.prefHasUserValue(PREF_SHOW_PLUGINS_IN_LIST) && this._prefSvc.getBoolPref(PREF_SHOW_PLUGINS_IN_LIST);
+	var showPlugins = true;
     var hidePluginsWithoutExtensions =
-      this._prefSvc.getBoolPref(PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS);
+      this._prefSvc.prefHasUserValue(PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS) && this._prefSvc.getBoolPref(PREF_HIDE_PLUGINS_WITHOUT_EXTENSIONS);
 
     for (let type in this._handledTypes) {
       let handlerInfo = this._handledTypes[type];
 
+	  dump(": "+ type+"\n");
       // Hide plugins without associated extensions if so prefed so we don't
       // show a whole bunch of obscure types handled by plugins on Mac.
       // Note: though protocol types don't have extensions, we still show them;
@@ -1141,11 +781,13 @@ var gApplicationsPane = {
           handlerInfo.wrappedHandlerInfo instanceof Ci.nsIMIMEInfo &&
           !handlerInfo.primaryExtension)
         continue;
+	  dump(":a "+ type+"  "+showPlugins+"\n");
 
       // Hide types handled only by plugins if so prefed.
       if (handlerInfo.handledOnlyByPlugin && !showPlugins)
         continue;
 
+	  dump(":b "+ type+"\n");
       // We couldn't find any reason to exclude the type, so include it.
       this._visibleTypes.push(handlerInfo);
 
@@ -1504,7 +1146,7 @@ var gApplicationsPane = {
         break;
       case Ci.nsIHandlerInfo.useHelperApp:
         if (preferredApp)
-          menu.selectedItem = 
+          menu.selectedItem =
             possibleAppMenuItems.filter(function(v) v.handlerApp.equals(preferredApp))[0];
         break;
       case kActionUsePlugin:
