@@ -12,10 +12,17 @@ const pwmgr = Cc["@mozilla.org/login-manager;1"].getService(Ci.nsILoginManager);
 const zoom_list = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0];
 var zoom_index = 7;
 
+var gContextMenu = null; // nsContextMenu instance
+
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("chrome://ssb/content/modules/FileIO.jsm");
 Cu.import("chrome://ssb/content/modules/SSBrowserInfo.jsm");
 
+XPCOMUtils.defineLazyGetter(this, "PageMenu", function() {
+  let tmp = {};
+  Cu.import("resource://gre/modules/PageMenu.jsm", tmp);
+  return new tmp.PageMenu();
+});
 
 function obj_dump(obj){
   var txt = '';
@@ -25,7 +32,54 @@ function obj_dump(obj){
   dump(txt);
 }
 
-//TODO:
+/**
+ * Gets the selected text in the active browser. Leading and trailing
+ * whitespace is removed, and consecutive whitespace is replaced by a single
+ * space. A maximum of 150 characters will be returned, regardless of the value
+ * of aCharLen.
+ *
+ * @param aCharLen
+ *        The maximum number of characters to return.
+ */
+function getBrowserSelection(aCharLen) {
+  // selections of more than 150 characters aren't useful
+  const kMaxSelectionLen = 150;
+  const charLen = Math.min(aCharLen || kMaxSelectionLen, kMaxSelectionLen);
+  let commandDispatcher = document.commandDispatcher;
+
+  var focusedWindow = commandDispatcher.focusedWindow;
+  var selection = focusedWindow.getSelection().toString();
+  // try getting a selected text in text input.
+  if (!selection) {
+    let element = commandDispatcher.focusedElement;
+    var isOnTextInput = function isOnTextInput(elem) {
+      // we avoid to return a value if a selection is in password field.
+      // ref. bug 565717
+      return elem instanceof HTMLTextAreaElement ||
+             (elem instanceof HTMLInputElement && elem.mozIsTextField(true));
+    };
+
+    if (isOnTextInput(element)) {
+      selection = element.QueryInterface(Ci.nsIDOMNSEditableElement)
+                         .editor.selection.toString();
+    }
+  }
+
+  if (selection) {
+    if (selection.length > charLen) {
+      // only use the first charLen important chars. see bug 221361
+      var pattern = new RegExp("^(?:\\s*.){0," + charLen + "}");
+      pattern.test(selection);
+      selection = RegExp.lastMatch;
+    }
+
+    selection = selection.trim().replace(/\s+/g, " ");
+
+    if (selection.length > charLen)
+      selection = selection.substr(0, charLen);
+  }
+  return selection;
+}
 
 
 // nsIWebProgressListener implementation to monitor activity in the browser.
