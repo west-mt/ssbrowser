@@ -5,3 +5,34 @@
 <!ENTITY ssbrowser.stop    "Stop">
 <!ENTITY ssbrowser.go      "Go">
 <!ENTITY ssbrowser.console "Console">
+
+
+<!ENTITY backCmd.label                "Back">
+<!ENTITY backCmd.accesskey            "B">
+<!ENTITY forwardCmd.label             "Forward">
+<!ENTITY forwardCmd.accesskey         "F">
+<!ENTITY reloadCmd.label              "Reload">
+<!ENTITY reloadCmd.accesskey          "R">
+<!ENTITY stopCmd.label                "Stop">
+<!ENTITY stopCmd.accesskey            "S">
+
+<!ENTITY undoCmd.label            "Undo">  
+<!ENTITY undoCmd.accesskey          "U"> 
+<!ENTITY redoCmd.label            "Redo">  
+<!ENTITY redoCmd.key            "Y">  
+<!ENTITY redoCmd.accesskey          "R"> 
+<!ENTITY cutCmd.label           "Cut">  
+<!ENTITY cutCmd.key             "X">  
+<!ENTITY cutCmd.accesskey         "t"> 
+<!ENTITY copyCmd.label            "Copy">  
+<!ENTITY copyCmd.key            "C">  
+<!ENTITY copyCmd.accesskey          "C"> 
+<!ENTITY pasteCmd.label           "Paste">  
+<!ENTITY pasteCmd.key           "V">  
+<!ENTITY pasteCmd.accesskey         "P"> 
+<!ENTITY deleteCmd.label          "Delete">  
+<!ENTITY deleteCmd.key            "D">  
+<!ENTITY deleteCmd.accesskey        "D"> 
+<!ENTITY selectAllCmd.label         "Select All">  
+<!ENTITY selectAllCmd.key         "A">  
+<!ENTITY selectAllCmd.accesskey       "A"> 

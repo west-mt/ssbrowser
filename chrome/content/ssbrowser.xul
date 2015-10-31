@@ -16,7 +16,7 @@
 	<script type="application/javascript" src="chrome://ssb/content/jquery-1.10.2.min.js" />
     <script type="application/javascript"
                 src="chrome://ssb/content/ssbrowser.js" />
-	<script type="application/javascript" src="chrome://ssb/content/nsContextMenu.js"/>
+	<script type="application/javascript" src="chrome://ssb/content/ssbContextMenu.js"/>
     <hbox class="navbar">
       <toolbarbutton class="back" oncommand="back();" disabled ="true"/>
       <toolbarbutton class="forward" oncommand="forward();" disabled ="true"/>
@@ -29,7 +29,7 @@
     <menupopup id="contentAreaContextMenu" pagemenu="start"
                onpopupshowing="if (event.target != this)
                                  return true;
-                               gContextMenu = new nsContextMenu(this, event.shiftKey);
+                               gContextMenu = new ssbContextMenu(this, event.shiftKey);
                                if (gContextMenu.shouldDisplay)
                                  updateEditUIVisibility();
                                return gContextMenu.shouldDisplay;"
