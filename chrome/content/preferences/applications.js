@@ -594,6 +594,7 @@ var gApplicationsPane = {
       self._sortVisibleTypes();
       self._rebuildView();
 
+	  //dump("//" + this._visibleTypes + "\n");
       // Notify observers that the UI is now ready
       Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService).
       notifyObservers(window, "app-handler-pane-loaded", null);
@@ -769,7 +770,7 @@ var gApplicationsPane = {
     for (let type in this._handledTypes) {
       let handlerInfo = this._handledTypes[type];
 
-	  dump(": "+ type+"\n");
+	  //dump(": "+ type+"\n");
       // Hide plugins without associated extensions if so prefed so we don't
       // show a whole bunch of obscure types handled by plugins on Mac.
       // Note: though protocol types don't have extensions, we still show them;
@@ -781,13 +782,13 @@ var gApplicationsPane = {
           handlerInfo.wrappedHandlerInfo instanceof Ci.nsIMIMEInfo &&
           !handlerInfo.primaryExtension)
         continue;
-	  dump(":a "+ type+"  "+showPlugins+"\n");
+	  //dump(":a "+ type+"  "+showPlugins+"\n");
 
       // Hide types handled only by plugins if so prefed.
       if (handlerInfo.handledOnlyByPlugin && !showPlugins)
         continue;
 
-	  dump(":b "+ type+"\n");
+	  //dump(":b "+ type+"\n");
       // We couldn't find any reason to exclude the type, so include it.
       this._visibleTypes.push(handlerInfo);
 
@@ -796,6 +797,9 @@ var gApplicationsPane = {
       else
         this._visibleTypeDescriptionCount[handlerInfo.description] = 1;
     }
+	//dump(":* "+ this._visibleTypes +"\n");
+	//dump(":/ "+ this._visibleTypeDescriptionCount +"\n");
+
   },
 
   _rebuildView: function() {
@@ -809,8 +813,12 @@ var gApplicationsPane = {
     if (this._filter.value)
       visibleTypes = visibleTypes.filter(this._matchesFilter, this);
 
+	//dump("//"+visibleTypes+"\n");
+
     for each (let visibleType in visibleTypes) {
       let item = document.createElement("richlistitem");
+	  //dump("  "+visibleType.type+"("+visibleType.smallIcon+", "+this._describePreferredAction(visibleType)+"\n"+this._getIconURLForPreferredAction(visibleType)+")"+" -> "+this._describeType(visibleType)+"\n");
+
       item.setAttribute("type", visibleType.type);
       item.setAttribute("typeDescription", this._describeType(visibleType));
       if (visibleType.smallIcon)
@@ -827,6 +835,8 @@ var gApplicationsPane = {
     }
 
     this._selectLastSelectedType();
+	//dump("// "+ this._list.disabled + "\n");
+	//dump("// "+ this._list.childNodes.length+"\n");
   },
 
   _matchesFilter: function(aType) {
@@ -1217,6 +1227,8 @@ var gApplicationsPane = {
 
     if (this._sortColumn.getAttribute("sortDirection") == "descending")
       this._visibleTypes.reverse();
+
+	//dump("//" + this._visibleTypes + "\n");
   },
 
   /**
