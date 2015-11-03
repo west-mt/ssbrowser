@@ -38,14 +38,42 @@
                               gContextMenu.hiding();
                               gContextMenu = null;
                               updateEditUIVisibility();">
-
+<!--
       <menugroup id="context-navigation">
 		<toolbarbutton class="back" oncommand="back();" disabled ="true"/>
 		<toolbarbutton class="forward" oncommand="forward();" disabled ="true"/>
 		<toolbarbutton class="reload_stop" oncommand="reload_stop();" mode=""/>
 		<toolbarbutton class="zoomdown" oncommand="zoom_down();"/>
 		<toolbarbutton class="zoomup" oncommand="zoom_up();"/>
+		<menuitem id="add-bookmark" class="menuitem-iconic" label="Add Bookmark" image="addbookmark.png" />
       </menugroup>
+-->
+      <menugroup id="context-navigation">
+        <menuitem id="context-back"
+                  class="menuitem-iconic"
+                  tooltiptext="&backButton.tooltip;"
+                  aria-label="&backCmd.label;"
+                  command="Browser:BackOrBackDuplicate"
+                  onclick="checkForMiddleClick(this, event);"/>
+        <menuitem id="context-forward"
+                  class="menuitem-iconic"
+                  tooltiptext="&forwardButton.tooltip;"
+                  aria-label="&forwardCmd.label;"
+                  command="Browser:ForwardOrForwardDuplicate"
+                  onclick="checkForMiddleClick(this, event);"/>
+		<menuitem id="context-reload"
+                  class="menuitem-iconic"
+                  tooltiptext="&reloadButton.tooltip;"
+                  aria-label="&reloadCmd.label;"
+                  oncommand="gContextMenu.reload(event);"
+                  onclick="checkForMiddleClick(this, event);"/>
+        <menuitem id="context-stop"
+                  class="menuitem-iconic"
+                  tooltiptext="&stopButton.tooltip;"
+                  aria-label="&stopCmd.label;"
+                  command="Browser:Stop"/>
+      </menugroup>
+
 	  <menuseparator id="context-sep-navigation"/>
 <!--
       <menuseparator id="context-sep-ctp"/>
