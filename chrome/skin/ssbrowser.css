@@ -75,3 +75,83 @@
   list-style-image: url("chrome://ssb/skin/toolbar2.png");
   -moz-image-region: rect(0px 467px 17px 450px);
 }
+
+
+
+.menuitem-iconic {
+  /*-moz-box-flex: 1;*/
+  -moz-appearance: none;
+  -moz-box-pack: center !important;
+  -moz-box-align: center !important;
+  margin: 2px;
+}
+
+
+#context-navigation {
+  background-color: menu;
+  padding-bottom: 4px;
+}
+
+#context-sep-navigation {
+  -moz-margin-start: -28px;
+  margin-top: -4px;
+}
+
+#context-back {
+/*
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back");
+*/
+  -moz-box-pack: center !important;
+  -moz-box-align: center !important;
+  list-style-image: url("chrome://ssb/skin/toolbar.png");
+  -moz-image-region: rect(0px 17px 17px 0px);
+}
+
+#context-back[_moz-menuactive=true] {
+/*
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-active");
+*/
+  -moz-image-region: rect(0px 17px 17px 0px);
+}
+
+#context-back[disabled=true] {
+  /*list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-disabled");*/
+  -moz-image-region: rect(18px 17px 35px 0px) !important;
+}
+
+#context-forward {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#forward");
+}
+
+#context-forward[_moz-menuactive=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#forward-active");
+}
+
+#context-forward[disabled=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#forward-disabled");
+}
+
+#context-reload {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload");
+}
+
+#context-reload[_moz-menuactive=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload-active");
+}
+
+#context-reload[disabled=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload-disabled");
+}
+
+#context-stop {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop");
+}
+
+#context-stop[_moz-menuactive=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop-active");
+}
+
+#context-stop[disabled=true] {
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop-disabled");
+}
+
