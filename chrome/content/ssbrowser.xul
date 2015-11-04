@@ -49,6 +49,22 @@
       </menugroup>
 -->
       <menugroup id="context-navigation">
+        <menuitem class="menuitem-iconic back"
+                  tooltiptext="&backButton.tooltip;"
+                  aria-label="&backCmd.label;"
+                  oncommand="back();"
+                  disabled="true"/>
+        <menuitem class="menuitem-iconic forward"
+                  tooltiptext="&forwardButton.tooltip;"
+                  aria-label="&forwardCmd.label;"
+                  oncommand="forward();"
+                  disabled="true"/>
+		<menuitem class="menuitem-iconic reload_stop"
+                  tooltiptext="&reloadButton.tooltip;"
+                  aria-label="&reloadCmd.label;"
+                  oncommand="reload_stop();"
+                  mode=""/>
+<!--
         <menuitem id="context-back"
                   class="menuitem-iconic"
                   tooltiptext="&backButton.tooltip;"
@@ -72,6 +88,7 @@
                   tooltiptext="&stopButton.tooltip;"
                   aria-label="&stopCmd.label;"
                   command="Browser:Stop"/>
+-->
       </menugroup>
 
 	  <menuseparator id="context-sep-navigation"/>
