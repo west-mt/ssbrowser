@@ -1,3 +1,10 @@
+/*
+ * TODO:
+ *  - コンテクストメニューの実装
+ *  - ウインドウをOSのスタイルに合わせる。
+ *  - 全画面表示対応
+ */
+
 var browser;
 var listener;
 var status_msg;
