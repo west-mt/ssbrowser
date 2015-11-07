@@ -26,7 +26,7 @@
 	margin: 0px;
 }
 
-.back {
+#navbar-back {
   list-style-image: url("chrome://ssb/skin/toolbar.png");
   /*                    top right bottom left */ 
   -moz-image-region: rect(0px 17px 17px 0px);
@@ -34,27 +34,27 @@
 /* list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back"); */
 }
 
-.back[disabled="true"] {
+#navbar-back[disabled="true"] {
 
   /*list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-disabled");*/
-  -moz-image-region: rect(18px 17px 35px 0px) !important;
+  -moz-image-region: rect(18px 17px 35px 0px); /* !important;*/
 }
 
-.forward {
+#navbar-forward {
   list-style-image: url("chrome://ssb/skin/toolbar.png");
   -moz-image-region: rect(0px 35px 17px 17px);
 }
 
-.forward[disabled="true"] {
+#navbar-forward[disabled="true"] {
   -moz-image-region: rect(18px 35px 35px 17px);
 }
 
-.reload_stop[mode=""]{
+#navbar-reload_stop[mode=""]{
   list-style-image: url("chrome://ssb/skin/toolbar.png");
   -moz-image-region: rect(0px 71px 17px 54px);
 }
 
-.reload_stop[mode="loading"] {
+#navbar-reload_stop[mode="loading"] {
   list-style-image: url("chrome://ssb/skin/toolbar.png");
   -moz-image-region: rect(0px 53px 17px 36px);
 }
@@ -86,6 +86,8 @@
   -moz-box-pack: center !important;
   -moz-box-align: center !important;
   margin: 2px;
+  width: 40px;
+  height: 30px;
 }
 
 
@@ -105,15 +107,11 @@
 }
 
 #context-back[_moz-menuactive=true] {
-/*
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-active");
-*/
-  -moz-image-region: rect(0px 17px 17px 0px);
 }
 
 #context-back[disabled=true] {
-  /*list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-disabled");*/
-  -moz-image-region: rect(18px 17px 35px 0px) !important;
+  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#back-disabled");
 }
 
 #context-forward {
@@ -128,26 +126,19 @@
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#forward-disabled");
 }
 
-#context-reload {
+#context-reload_stop[mode=""]{
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload");
 }
 
-#context-reload[_moz-menuactive=true] {
+#context-reload_stop[mode=""][_moz-menuactive=true]{
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload-active");
 }
 
-#context-reload[disabled=true] {
-  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#reload-disabled");
-}
-
-#context-stop {
+#context-reload_stop[mode="loading"] {
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop");
 }
 
-#context-stop[_moz-menuactive=true] {
+#context-reload_stop[mode="loading"][_moz-menuactive=true] {
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop-active");
 }
 
-#context-stop[disabled=true] {
-  list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop-disabled");
-}

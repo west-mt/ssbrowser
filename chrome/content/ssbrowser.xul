@@ -18,9 +18,9 @@
                 src="chrome://ssb/content/ssbrowser.js" />
 	<script type="application/javascript" src="chrome://ssb/content/ssbContextMenu.js"/>
     <hbox class="navbar">
-      <toolbarbutton class="back" oncommand="back();" disabled ="true"/>
-      <toolbarbutton class="forward" oncommand="forward();" disabled ="true"/>
-      <toolbarbutton class="reload_stop" oncommand="reload_stop();" mode=""/>
+      <toolbarbutton id="navbar-back" class="back" oncommand="back();" disabled ="true"/>
+      <toolbarbutton id="navbar-forward" class="forward" oncommand="forward();" disabled ="true"/>
+      <toolbarbutton id="navbar-reload_stop" class="reload_stop" oncommand="reload_stop();" mode=""/>
       <textbox id="urlbar" value="" flex="1" readonly="true" onchange="go();"/>
       <toolbarbutton class="zoomdown" oncommand="zoom_down();"/>
       <toolbarbutton class="zoomup" oncommand="zoom_up();"/>
@@ -49,17 +49,20 @@
       </menugroup>
 -->
       <menugroup id="context-navigation">
-        <menuitem class="menuitem-iconic back"
+        <menuitem id="context-back"
+				  class="menuitem-iconic back"
                   tooltiptext="&backButton.tooltip;"
                   aria-label="&backCmd.label;"
                   oncommand="back();"
                   disabled="true"/>
-        <menuitem class="menuitem-iconic forward"
+        <menuitem id="context-forward"
+				  class="menuitem-iconic forward"
                   tooltiptext="&forwardButton.tooltip;"
                   aria-label="&forwardCmd.label;"
                   oncommand="forward();"
                   disabled="true"/>
-		<menuitem class="menuitem-iconic reload_stop"
+		<menuitem id="context-reload_stop"
+				  class="menuitem-iconic reload_stop"
                   tooltiptext="&reloadButton.tooltip;"
                   aria-label="&reloadCmd.label;"
                   oncommand="reload_stop();"
