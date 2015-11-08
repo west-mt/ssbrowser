@@ -30,14 +30,8 @@
                onpopupshowing="if (event.target != this)
                                  return true;
                                gContextMenu = new ssbContextMenu(this, event.shiftKey);
-                               if (gContextMenu.shouldDisplay)
-                                 updateEditUIVisibility();
-                               return gContextMenu.shouldDisplay;"
-               onpopuphiding="if (event.target != this)
-                                return;
-                              gContextMenu.hiding();
-                              gContextMenu = null;
-                              updateEditUIVisibility();">
+                               return true;"
+               onpopuphiding="gContextMenu = null;">
 <!--
       <menugroup id="context-navigation">
 		<toolbarbutton class="back" oncommand="back();" disabled ="true"/>
@@ -144,7 +138,6 @@
                 label="&selectAllCmd.label;"
                 accesskey="&selectAllCmd.accesskey;"
                 command="cmd_selectAll"/>
-      <menuseparator id="context-sep-selectall"/>
     </menupopup>
 
 	<browser id="browser" type="content-primary" flex="1"
