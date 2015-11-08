@@ -142,17 +142,21 @@
   list-style-image: url("chrome://ssb/skin/content-contextmenu.svg#stop-active");
 }
 
+
 @media (-moz-windows-compositor) {
+/*
   window {
     -moz-appearance: -moz-win-glass;
   }
-
+*/
 
   /* On win10, if we don't set this on the entire browser container including
    * the sidebar, if the sidebar is open the accent color bleeds through in
    * the titlebar */
+  /*
   #browser {
     -moz-appearance: -moz-win-exclude-glass;
   }
+  */
 
 }
