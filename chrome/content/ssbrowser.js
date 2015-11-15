@@ -485,6 +485,10 @@ function load_settings() {
       }
       // if webapp was closed in fullscreen mode, it should relaunch as such.
       window.fullScreen = settings.window.fullscreen;
+	  if(settings.window.fullscreen){
+		$("#navbar").hide();
+		$("#bottombar").hide();
+	  }
     }
   }
 }

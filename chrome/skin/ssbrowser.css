@@ -2,10 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-.navbar {
+#navbar {
+	padding: 0px;
+	margin: 0px;
 }
 
-.navbar .toolbarbutton-text {
+#navbar .toolbarbutton-text {
   display: none;
 }
 
@@ -19,11 +21,6 @@
 	height: 16px !important;
 	list-style-image: url("chrome://ssb/skin/toolbar2.png");
 	-moz-image-region: rect(0px 305px 17px 288px);
-}
-
-.navbar {
-	padding: 0px;
-	margin: 0px;
 }
 
 #navbar-back {

@@ -111,11 +111,9 @@ function goDoCommand(aCommand)
 }
 
 function goFullScreen(){
-  dump(browser.mozRequestFullScreen+"\n");
-  dump(browser.mozFullScreenEnabled+"\n");
-  dump(browser.allowfullscreen+"\n");
-  dump(document.mozRequestFullScreen+"\n");
-  dump(document.mozFullScreenEnabled+"\n");
-  dump(document.allowfullscreen+"\n");
-  browser.mozRequestFullScreen();
+  //dump(document.fullScreen+"\n");
+  //dump(window.fullScreen+"\n");
+  window.fullScreen = !window.fullScreen;
+  $("#navbar").toggle(400);
+  $("#bottombar").toggle(400);
 }
