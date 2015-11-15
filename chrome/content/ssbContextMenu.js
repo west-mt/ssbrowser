@@ -26,6 +26,7 @@ function ssbContextMenu(aXulMenu, aIsShift) {
   this.showItem("context-delete", this.onTextInput && this.isTextSelected);
   this.showItem("context-sep-paste", this.onTextInput);
   this.showItem("context-selectall", !this.isContentSelected);
+
 }
 
 // Prototype for ssbContextMenu "class."
@@ -78,3 +79,33 @@ ssbContextMenu.prototype = {
 
 
 };
+
+function goSetCommandEnabled(aID, aEnabled)
+{
+  var node = document.getElementById(aID);
+
+  dump(aID+": "+node+"\n");
+  if (node) {
+    if (aEnabled)
+      node.removeAttribute("disabled");
+    else
+      node.setAttribute("disabled", "true");
+  }
+}
+
+function goDoCommand(aCommand)
+{
+  try {
+    var controller = top.document.commandDispatcher
+                        .getControllerForCommand(aCommand);
+
+	//dump(controller.isCommandEnabled(aCommand));
+
+    if (controller && controller.isCommandEnabled(aCommand))
+      controller.doCommand(aCommand);
+  }
+  catch (e) {
+    dump("An error occurred executing the " +
+         aCommand + " command: " + e + "\n");
+  }
+}
