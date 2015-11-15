@@ -1,6 +1,5 @@
 /*
  * TODO:
- *  - 全画面表示対応
  */
 
 var browser;
