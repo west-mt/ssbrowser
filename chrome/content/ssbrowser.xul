@@ -26,6 +26,12 @@
       <toolbarbutton class="zoomup" oncommand="zoom_up();"/>
     </hbox>
 
+	<keyset id="mainKeyset">
+      <!-- <key id="key_cut" key="X" modifiers="accel"/> -->
+	  <key id="key_fullScreen" keycode="VK_F11" oncommand="goFullScreen()"/>
+	</keyset>
+
+
     <menupopup id="contentAreaContextMenu" pagemenu="start"
                onpopupshowing="if (event.target != this)
                                  return true;
