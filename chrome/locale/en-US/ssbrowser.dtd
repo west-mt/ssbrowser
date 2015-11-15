@@ -40,3 +40,6 @@
 <!ENTITY selectAllCmd.label         "Select All">  
 <!ENTITY selectAllCmd.key         "A">  
 <!ENTITY selectAllCmd.accesskey       "A"> 
+<!ENTITY fullScreenCmd.label         "Full Screen">  
+<!ENTITY fullScreenCmd.key         "F">  
+<!ENTITY fullScreenCmd.accesskey       "F"> 

@@ -80,6 +80,11 @@
                 label="&selectAllCmd.label;"
                 accesskey="&selectAllCmd.accesskey;"
                 oncommand="goDoCommand('cmd_selectAll')"/>
+      <menuseparator id="context-full-screen"/>
+      <menuitem id="context-fullscreen"
+                label="&fullScreenCmd.label;"
+                accesskey="&fullScreenCmd.accesskey;"
+                oncommand="goFullScreen()"/>
     </menupopup>
 
 	<browser id="browser" type="content-primary" flex="1"

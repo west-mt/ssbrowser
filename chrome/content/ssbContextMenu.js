@@ -109,3 +109,13 @@ function goDoCommand(aCommand)
          aCommand + " command: " + e + "\n");
   }
 }
+
+function goFullScreen(){
+  dump(browser.mozRequestFullScreen+"\n");
+  dump(browser.mozFullScreenEnabled+"\n");
+  dump(browser.allowfullscreen+"\n");
+  dump(document.mozRequestFullScreen+"\n");
+  dump(document.mozFullScreenEnabled+"\n");
+  dump(document.allowfullscreen+"\n");
+  browser.mozRequestFullScreen();
+}
