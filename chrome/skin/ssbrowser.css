@@ -12,8 +12,11 @@
 }
 
 #browser {
-	margin: 1px 2px 0px 2px;
-	border: thin groove #aaaaaa;
+	margin: 0px;
+	padding: 0px;
+	border-width: thin 0px;
+	border-style: solid none;
+	border-color: #aaaaaa;
 }
 
 #link_status {
